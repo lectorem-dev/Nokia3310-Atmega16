@@ -12,8 +12,11 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text          0x00000000        0x0 pcd8544.o
+ .data          0x00000000        0x0 pcd8544.o
+ .bss           0x00000000        0x0 pcd8544.o
  .text.pcd8544_print_string
-                0x00000000       0x1a main.o
+                0x00000000       0x1a pcd8544.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
@@ -63,6 +66,7 @@ Linker script and memory map
 
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega16/avr5/crtatmega16.o
 LOAD main.o
+LOAD pcd8544.o
 START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libm.a
 END GROUP
@@ -252,26 +256,26 @@ END GROUP
                 0x0000007e                __vector_20
                 0x00000082                . = ALIGN (0x2)
  *(.text.*)
+ .text.main     0x00000082       0x28 main.o
+                0x00000082                main
  .text.pcd8544_send
-                0x00000082       0x26 main.o
-                0x00000082                pcd8544_send
+                0x000000aa       0x26 pcd8544.o
+                0x000000aa                pcd8544_send
  .text.pcd8544_init
-                0x000000a8       0x54 main.o
-                0x000000a8                pcd8544_init
+                0x000000d0       0x54 pcd8544.o
+                0x000000d0                pcd8544_init
  .text.pcd8544_send_char
-                0x000000fc       0x5c main.o
-                0x000000fc                pcd8544_send_char
+                0x00000124       0x5c pcd8544.o
+                0x00000124                pcd8544_send_char
  .text.pcd8544_clear
-                0x00000158       0x22 main.o
-                0x00000158                pcd8544_clear
+                0x00000180       0x22 pcd8544.o
+                0x00000180                pcd8544_clear
  .text.pcd8544_set_cursor
-                0x0000017a       0x58 main.o
-                0x0000017a                pcd8544_set_cursor
+                0x000001a2       0x58 pcd8544.o
+                0x000001a2                pcd8544_set_cursor
  .text.pcd8544_print_at
-                0x000001d2       0x22 main.o
-                0x000001d2                pcd8544_print_at
- .text.main     0x000001f4       0x28 main.o
-                0x000001f4                main
+                0x000001fa       0x22 pcd8544.o
+                0x000001fa                pcd8544_print_at
                 0x0000021c                . = ALIGN (0x2)
  *(.fini9)
  .fini9         0x0000021c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
@@ -308,7 +312,7 @@ END GROUP
  *(.rodata*)
  .rodata.str1.1
                 0x00800060        0xc main.o
- .rodata.ASCII  0x0080006c      0x1e0 main.o
+ .rodata.ASCII  0x0080006c      0x1e0 pcd8544.o
  *(.gnu.linkonce.r*)
                 0x0080024c                . = ALIGN (0x2)
                 0x0080024c                _edata = .
@@ -371,6 +375,7 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 main.o
                                  0x31 (size before relaxing)
+ .comment       0x00000030       0x31 pcd8544.o
 
 .note.gnu.avr.deviceinfo
                 0x00000000       0x3c
@@ -392,42 +397,50 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x58
+.debug_aranges  0x00000000       0x70
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x58 main.o
+                0x00000000       0x20 main.o
+ .debug_aranges
+                0x00000020       0x50 pcd8544.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x9aa
+.debug_info     0x00000000      0xa7e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x52e C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega16/avr5/crtatmega16.o
- .debug_info    0x0000052e      0x47c main.o
+ .debug_info    0x0000052e      0x163 main.o
+ .debug_info    0x00000691      0x3ed pcd8544.o
 
-.debug_abbrev   0x00000000      0x683
+.debug_abbrev   0x00000000      0x746
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4e7 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega16/avr5/crtatmega16.o
- .debug_abbrev  0x000004e7      0x19c main.o
+ .debug_abbrev  0x000004e7       0xfd main.o
+ .debug_abbrev  0x000005e4      0x162 pcd8544.o
 
-.debug_line     0x00000000      0x3eb
+.debug_line     0x00000000      0x4e4
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x116 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega16/avr5/crtatmega16.o
- .debug_line    0x00000116      0x2d5 main.o
+ .debug_line    0x00000116      0x12b main.o
+ .debug_line    0x00000241      0x2a3 pcd8544.o
 
-.debug_frame    0x00000000       0xd0
+.debug_frame    0x00000000       0xe4
  *(.debug_frame)
- .debug_frame   0x00000000       0xd0 main.o
+ .debug_frame   0x00000000       0x24 main.o
+ .debug_frame   0x00000024       0xc0 pcd8544.o
 
-.debug_str      0x00000000      0x3cd
+.debug_str      0x00000000      0x3dc
  *(.debug_str)
  .debug_str     0x00000000      0x1af C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega16/avr5/crtatmega16.o
- .debug_str     0x000001af      0x21e main.o
-                                0x257 (size before relaxing)
+ .debug_str     0x000001af      0x1bb main.o
+                                0x1ef (size before relaxing)
+ .debug_str     0x0000036a       0x72 pcd8544.o
+                                0x255 (size before relaxing)
 
 .debug_loc      0x00000000      0x30b
  *(.debug_loc)
- .debug_loc     0x00000000      0x30b main.o
+ .debug_loc     0x00000000      0x30b pcd8544.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -447,9 +460,10 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x48
+.debug_ranges   0x00000000       0x50
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x48 main.o
+ .debug_ranges  0x00000000       0x10 main.o
+ .debug_ranges  0x00000010       0x40 pcd8544.o
 
 .debug_macro
  *(.debug_macro)
