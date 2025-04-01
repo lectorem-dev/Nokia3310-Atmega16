@@ -1,0 +1,345 @@
+
+pcd8544-atmega16.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000220  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         000001ec  00800060  00000220  00000294  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000480  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000004b0  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  000004ec  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000009aa  00000000  00000000  00000544  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000683  00000000  00000000  00000eee  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000003eb  00000000  00000000  00001571  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000d0  00000000  00000000  0000195c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003cd  00000000  00000000  00001a2c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000030b  00000000  00000000  00001df9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000048  00000000  00000000  00002104  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	12 e0       	ldi	r17, 0x02	; 2
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e0 e2       	ldi	r30, 0x20	; 32
+  68:	f2 e0       	ldi	r31, 0x02	; 2
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	ac 34       	cpi	r26, 0x4C	; 76
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+  76:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <main>
+  7a:	0c 94 0e 01 	jmp	0x21c	; 0x21c <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <pcd8544_send>:
+
+void pcd8544_print_string(char *str) {
+	while (*str) {
+		pcd8544_send_char(*str++);
+	}
+}
+  82:	81 30       	cpi	r24, 0x01	; 1
+  84:	21 f4       	brne	.+8      	; 0x8e <pcd8544_send+0xc>
+  86:	88 b3       	in	r24, 0x18	; 24
+  88:	88 60       	ori	r24, 0x08	; 8
+  8a:	88 bb       	out	0x18, r24	; 24
+  8c:	03 c0       	rjmp	.+6      	; 0x94 <pcd8544_send+0x12>
+  8e:	88 b3       	in	r24, 0x18	; 24
+  90:	87 7f       	andi	r24, 0xF7	; 247
+  92:	88 bb       	out	0x18, r24	; 24
+  94:	88 b3       	in	r24, 0x18	; 24
+  96:	8f 7e       	andi	r24, 0xEF	; 239
+  98:	88 bb       	out	0x18, r24	; 24
+  9a:	6f b9       	out	0x0f, r22	; 15
+  9c:	77 9b       	sbis	0x0e, 7	; 14
+  9e:	fe cf       	rjmp	.-4      	; 0x9c <pcd8544_send+0x1a>
+  a0:	88 b3       	in	r24, 0x18	; 24
+  a2:	80 61       	ori	r24, 0x10	; 16
+  a4:	88 bb       	out	0x18, r24	; 24
+  a6:	08 95       	ret
+
+000000a8 <pcd8544_init>:
+  a8:	87 b3       	in	r24, 0x17	; 23
+  aa:	8c 6b       	ori	r24, 0xBC	; 188
+  ac:	87 bb       	out	0x17, r24	; 23
+  ae:	81 e5       	ldi	r24, 0x51	; 81
+  b0:	8d b9       	out	0x0d, r24	; 13
+  b2:	88 b3       	in	r24, 0x18	; 24
+  b4:	8b 7f       	andi	r24, 0xFB	; 251
+  b6:	88 bb       	out	0x18, r24	; 24
+  b8:	87 ea       	ldi	r24, 0xA7	; 167
+  ba:	91 e6       	ldi	r25, 0x61	; 97
+  bc:	01 97       	sbiw	r24, 0x01	; 1
+  be:	f1 f7       	brne	.-4      	; 0xbc <pcd8544_init+0x14>
+  c0:	00 c0       	rjmp	.+0      	; 0xc2 <pcd8544_init+0x1a>
+  c2:	00 00       	nop
+  c4:	88 b3       	in	r24, 0x18	; 24
+  c6:	84 60       	ori	r24, 0x04	; 4
+  c8:	88 bb       	out	0x18, r24	; 24
+  ca:	61 e2       	ldi	r22, 0x21	; 33
+  cc:	80 e0       	ldi	r24, 0x00	; 0
+  ce:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+  d2:	6a eb       	ldi	r22, 0xBA	; 186
+  d4:	80 e0       	ldi	r24, 0x00	; 0
+  d6:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+  da:	64 e0       	ldi	r22, 0x04	; 4
+  dc:	80 e0       	ldi	r24, 0x00	; 0
+  de:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+  e2:	64 e1       	ldi	r22, 0x14	; 20
+  e4:	80 e0       	ldi	r24, 0x00	; 0
+  e6:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+  ea:	60 e2       	ldi	r22, 0x20	; 32
+  ec:	80 e0       	ldi	r24, 0x00	; 0
+  ee:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+  f2:	6c e0       	ldi	r22, 0x0C	; 12
+  f4:	80 e0       	ldi	r24, 0x00	; 0
+  f6:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+  fa:	08 95       	ret
+
+000000fc <pcd8544_send_char>:
+  fc:	1f 93       	push	r17
+  fe:	cf 93       	push	r28
+ 100:	df 93       	push	r29
+ 102:	90 ee       	ldi	r25, 0xE0	; 224
+ 104:	98 0f       	add	r25, r24
+ 106:	91 36       	cpi	r25, 0x61	; 97
+ 108:	18 f5       	brcc	.+70     	; 0x150 <pcd8544_send_char+0x54>
+ 10a:	18 2f       	mov	r17, r24
+ 10c:	60 e0       	ldi	r22, 0x00	; 0
+ 10e:	81 e0       	ldi	r24, 0x01	; 1
+ 110:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+ 114:	c0 e0       	ldi	r28, 0x00	; 0
+ 116:	d0 e0       	ldi	r29, 0x00	; 0
+ 118:	14 c0       	rjmp	.+40     	; 0x142 <pcd8544_send_char+0x46>
+ 11a:	21 2f       	mov	r18, r17
+ 11c:	30 e0       	ldi	r19, 0x00	; 0
+ 11e:	20 52       	subi	r18, 0x20	; 32
+ 120:	31 09       	sbc	r19, r1
+ 122:	f9 01       	movw	r30, r18
+ 124:	ee 0f       	add	r30, r30
+ 126:	ff 1f       	adc	r31, r31
+ 128:	ee 0f       	add	r30, r30
+ 12a:	ff 1f       	adc	r31, r31
+ 12c:	e2 0f       	add	r30, r18
+ 12e:	f3 1f       	adc	r31, r19
+ 130:	e4 59       	subi	r30, 0x94	; 148
+ 132:	ff 4f       	sbci	r31, 0xFF	; 255
+ 134:	ec 0f       	add	r30, r28
+ 136:	fd 1f       	adc	r31, r29
+ 138:	60 81       	ld	r22, Z
+ 13a:	81 e0       	ldi	r24, 0x01	; 1
+ 13c:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+ 140:	21 96       	adiw	r28, 0x01	; 1
+ 142:	c5 30       	cpi	r28, 0x05	; 5
+ 144:	d1 05       	cpc	r29, r1
+ 146:	4c f3       	brlt	.-46     	; 0x11a <pcd8544_send_char+0x1e>
+ 148:	60 e0       	ldi	r22, 0x00	; 0
+ 14a:	81 e0       	ldi	r24, 0x01	; 1
+ 14c:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+ 150:	df 91       	pop	r29
+ 152:	cf 91       	pop	r28
+ 154:	1f 91       	pop	r17
+ 156:	08 95       	ret
+
+00000158 <pcd8544_clear>:
+		}
+		pcd8544_send(LCD_D, 0x00);
+	}
+}
+
+void pcd8544_clear(void) {
+ 158:	cf 93       	push	r28
+ 15a:	df 93       	push	r29
+	for (int i = 0; i < LCD_X * LCD_Y / 8; i++) {
+ 15c:	c0 e0       	ldi	r28, 0x00	; 0
+ 15e:	d0 e0       	ldi	r29, 0x00	; 0
+ 160:	05 c0       	rjmp	.+10     	; 0x16c <pcd8544_clear+0x14>
+		pcd8544_send(LCD_D, 0x00);
+ 162:	60 e0       	ldi	r22, 0x00	; 0
+ 164:	81 e0       	ldi	r24, 0x01	; 1
+ 166:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+		pcd8544_send(LCD_D, 0x00);
+	}
+}
+
+void pcd8544_clear(void) {
+	for (int i = 0; i < LCD_X * LCD_Y / 8; i++) {
+ 16a:	21 96       	adiw	r28, 0x01	; 1
+ 16c:	c8 3f       	cpi	r28, 0xF8	; 248
+ 16e:	81 e0       	ldi	r24, 0x01	; 1
+ 170:	d8 07       	cpc	r29, r24
+ 172:	bc f3       	brlt	.-18     	; 0x162 <pcd8544_clear+0xa>
+		pcd8544_send(LCD_D, 0x00);
+	}
+}
+ 174:	df 91       	pop	r29
+ 176:	cf 91       	pop	r28
+ 178:	08 95       	ret
+
+0000017a <pcd8544_set_cursor>:
+
+void pcd8544_set_cursor(uint8_t x, uint8_t y) {
+ 17a:	cf 93       	push	r28
+	x = x % 12; y = y % 6;
+ 17c:	9b ea       	ldi	r25, 0xAB	; 171
+ 17e:	89 9f       	mul	r24, r25
+ 180:	c1 2d       	mov	r28, r1
+ 182:	11 24       	eor	r1, r1
+ 184:	c6 95       	lsr	r28
+ 186:	c6 95       	lsr	r28
+ 188:	c6 95       	lsr	r28
+ 18a:	2c 2f       	mov	r18, r28
+ 18c:	22 0f       	add	r18, r18
+ 18e:	c2 0f       	add	r28, r18
+ 190:	2c 2f       	mov	r18, r28
+ 192:	22 0f       	add	r18, r18
+ 194:	22 0f       	add	r18, r18
+ 196:	c8 2f       	mov	r28, r24
+ 198:	c2 1b       	sub	r28, r18
+ 19a:	69 9f       	mul	r22, r25
+ 19c:	81 2d       	mov	r24, r1
+ 19e:	11 24       	eor	r1, r1
+ 1a0:	86 95       	lsr	r24
+ 1a2:	86 95       	lsr	r24
+ 1a4:	98 2f       	mov	r25, r24
+ 1a6:	99 0f       	add	r25, r25
+ 1a8:	89 0f       	add	r24, r25
+ 1aa:	98 2f       	mov	r25, r24
+ 1ac:	99 0f       	add	r25, r25
+ 1ae:	86 2f       	mov	r24, r22
+ 1b0:	89 1b       	sub	r24, r25
+	pcd8544_send(LCD_C, 0x40 + y);
+ 1b2:	60 e4       	ldi	r22, 0x40	; 64
+ 1b4:	68 0f       	add	r22, r24
+ 1b6:	80 e0       	ldi	r24, 0x00	; 0
+ 1b8:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+	pcd8544_send(LCD_C, 0x80 + x * 7);
+ 1bc:	6c 2f       	mov	r22, r28
+ 1be:	66 0f       	add	r22, r22
+ 1c0:	66 0f       	add	r22, r22
+ 1c2:	66 0f       	add	r22, r22
+ 1c4:	6c 1b       	sub	r22, r28
+ 1c6:	60 58       	subi	r22, 0x80	; 128
+ 1c8:	80 e0       	ldi	r24, 0x00	; 0
+ 1ca:	0e 94 41 00 	call	0x82	; 0x82 <pcd8544_send>
+}
+ 1ce:	cf 91       	pop	r28
+ 1d0:	08 95       	ret
+
+000001d2 <pcd8544_print_at>:
+
+void pcd8544_print_at(char *str, uint8_t x, uint8_t y) {
+ 1d2:	cf 93       	push	r28
+ 1d4:	df 93       	push	r29
+ 1d6:	ec 01       	movw	r28, r24
+ 1d8:	86 2f       	mov	r24, r22
+	pcd8544_set_cursor(x, y);
+ 1da:	64 2f       	mov	r22, r20
+ 1dc:	0e 94 bd 00 	call	0x17a	; 0x17a <pcd8544_set_cursor>
+	while (*str) {
+ 1e0:	03 c0       	rjmp	.+6      	; 0x1e8 <pcd8544_print_at+0x16>
+		pcd8544_send_char(*str++);
+ 1e2:	21 96       	adiw	r28, 0x01	; 1
+ 1e4:	0e 94 7e 00 	call	0xfc	; 0xfc <pcd8544_send_char>
+	pcd8544_send(LCD_C, 0x80 + x * 7);
+}
+
+void pcd8544_print_at(char *str, uint8_t x, uint8_t y) {
+	pcd8544_set_cursor(x, y);
+	while (*str) {
+ 1e8:	88 81       	ld	r24, Y
+ 1ea:	81 11       	cpse	r24, r1
+ 1ec:	fa cf       	rjmp	.-12     	; 0x1e2 <pcd8544_print_at+0x10>
+		pcd8544_send_char(*str++);
+	}
+}
+ 1ee:	df 91       	pop	r29
+ 1f0:	cf 91       	pop	r28
+ 1f2:	08 95       	ret
+
+000001f4 <main>:
+void pcd8544_clear(void);
+void pcd8544_set_cursor(uint8_t x, uint8_t y);
+void pcd8544_print_at(char *str, uint8_t x, uint8_t y);
+
+int main(void) {
+	pcd8544_init();
+ 1f4:	0e 94 54 00 	call	0xa8	; 0xa8 <pcd8544_init>
+	pcd8544_clear();
+ 1f8:	0e 94 ac 00 	call	0x158	; 0x158 <pcd8544_clear>
+	pcd8544_print_at("Hello World", 1, 0);
+ 1fc:	40 e0       	ldi	r20, 0x00	; 0
+ 1fe:	61 e0       	ldi	r22, 0x01	; 1
+ 200:	80 e6       	ldi	r24, 0x60	; 96
+ 202:	90 e0       	ldi	r25, 0x00	; 0
+ 204:	0e 94 e9 00 	call	0x1d2	; 0x1d2 <pcd8544_print_at>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 208:	2f e3       	ldi	r18, 0x3F	; 63
+ 20a:	8d e0       	ldi	r24, 0x0D	; 13
+ 20c:	93 e0       	ldi	r25, 0x03	; 3
+ 20e:	21 50       	subi	r18, 0x01	; 1
+ 210:	80 40       	sbci	r24, 0x00	; 0
+ 212:	90 40       	sbci	r25, 0x00	; 0
+ 214:	e1 f7       	brne	.-8      	; 0x20e <__EEPROM_REGION_LENGTH__+0xe>
+ 216:	00 c0       	rjmp	.+0      	; 0x218 <__EEPROM_REGION_LENGTH__+0x18>
+ 218:	00 00       	nop
+ 21a:	f6 cf       	rjmp	.-20     	; 0x208 <__EEPROM_REGION_LENGTH__+0x8>
+
+0000021c <_exit>:
+ 21c:	f8 94       	cli
+
+0000021e <__stop_program>:
+ 21e:	ff cf       	rjmp	.-2      	; 0x21e <__stop_program>
