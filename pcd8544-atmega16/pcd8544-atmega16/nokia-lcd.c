@@ -1,5 +1,5 @@
-#include "pcd8544.h"
-#include "pcd8544_font.h"
+#include "nokia-lcd.h"
+#include "font.h"
 
 #include <util/delay.h>
 

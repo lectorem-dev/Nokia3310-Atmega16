@@ -5,29 +5,29 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .text         00000bee  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000224  00800060  00000bee  00000c82  2**0
+  1 .data         00000226  00800060  00000bee  00000c82  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000001  00800284  00800284  00000ea6  2**0
+  2 .bss          00000001  00800286  00800286  00000ea8  2**0
                   ALLOC
-  3 .comment      0000005c  00000000  00000000  00000ea6  2**0
+  3 .comment      0000005c  00000000  00000000  00000ea8  2**0
                   CONTENTS, READONLY
   4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000f04  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000c0  00000000  00000000  00000f40  2**0
+  5 .debug_aranges 000000f0  00000000  00000000  00000f40  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000151f  00000000  00000000  00001000  2**0
+  6 .debug_info   000016b4  00000000  00000000  00001030  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000090a  00000000  00000000  0000251f  2**0
+  7 .debug_abbrev 00000a74  00000000  00000000  000026e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000009e2  00000000  00000000  00002e29  2**0
+  8 .debug_line   00000b73  00000000  00000000  00003158  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000200  00000000  00000000  0000380c  2**2
+  9 .debug_frame  00000228  00000000  00000000  00003ccc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004f7  00000000  00000000  00003a0c  2**0
+ 10 .debug_str    00000514  00000000  00000000  00003ef4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000009d1  00000000  00000000  00003f03  2**0
+ 11 .debug_loc    000009d1  00000000  00000000  00004408  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000d0  00000000  00000000  000048d4  2**0
+ 12 .debug_ranges 000000e0  00000000  00000000  00004dd9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -72,13 +72,13 @@ Disassembly of section .text:
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
-  70:	a4 38       	cpi	r26, 0x84	; 132
+  70:	a6 38       	cpi	r26, 0x86	; 134
   72:	b1 07       	cpc	r27, r17
   74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
 
 00000076 <__do_clear_bss>:
   76:	22 e0       	ldi	r18, 0x02	; 2
-  78:	a4 e8       	ldi	r26, 0x84	; 132
+  78:	a6 e8       	ldi	r26, 0x86	; 134
   7a:	b2 e0       	ldi	r27, 0x02	; 2
   7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
 
@@ -86,7 +86,7 @@ Disassembly of section .text:
   7e:	1d 92       	st	X+, r1
 
 00000080 <.do_clear_bss_start>:
-  80:	a5 38       	cpi	r26, 0x85	; 133
+  80:	a7 38       	cpi	r26, 0x87	; 135
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
   86:	0e 94 85 01 	call	0x30a	; 0x30a <main>
@@ -95,451 +95,442 @@ Disassembly of section .text:
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000092 <is_obstacle>:
-	{3, 4}, {5, 2}, {6, 4}, {8, 3}, {9, 2}
-};
+00000092 <shift_register_init>:
+#define SH_LD PD2
+#define CLK   PD3
+#define QH    PD4
 
-// Проверка, не пытается ли игрок вступить на препядствие
-int is_obstacle(int x, int y) {
-	for (int i = 0; i < OBSTACLE_COUNT; i++) {
-  92:	20 e0       	ldi	r18, 0x00	; 0
-  94:	30 e0       	ldi	r19, 0x00	; 0
-  96:	1a c0       	rjmp	.+52     	; 0xcc <is_obstacle+0x3a>
-		if (obstacles[i][0] == x && obstacles[i][1] == y) {
-  98:	f9 01       	movw	r30, r18
-  9a:	ee 0f       	add	r30, r30
-  9c:	ff 1f       	adc	r31, r31
-  9e:	ee 0f       	add	r30, r30
-  a0:	ff 1f       	adc	r31, r31
-  a2:	e0 5a       	subi	r30, 0xA0	; 160
-  a4:	ff 4f       	sbci	r31, 0xFF	; 255
-  a6:	40 81       	ld	r20, Z
-  a8:	51 81       	ldd	r21, Z+1	; 0x01
-  aa:	48 17       	cp	r20, r24
-  ac:	59 07       	cpc	r21, r25
-  ae:	61 f4       	brne	.+24     	; 0xc8 <is_obstacle+0x36>
-  b0:	f9 01       	movw	r30, r18
-  b2:	ee 0f       	add	r30, r30
-  b4:	ff 1f       	adc	r31, r31
-  b6:	ee 0f       	add	r30, r30
-  b8:	ff 1f       	adc	r31, r31
-  ba:	e0 5a       	subi	r30, 0xA0	; 160
-  bc:	ff 4f       	sbci	r31, 0xFF	; 255
-  be:	42 81       	ldd	r20, Z+2	; 0x02
-  c0:	53 81       	ldd	r21, Z+3	; 0x03
-  c2:	46 17       	cp	r20, r22
-  c4:	57 07       	cpc	r21, r23
-  c6:	41 f0       	breq	.+16     	; 0xd8 <is_obstacle+0x46>
-	{3, 4}, {5, 2}, {6, 4}, {8, 3}, {9, 2}
-};
-
-// Проверка, не пытается ли игрок вступить на препядствие
-int is_obstacle(int x, int y) {
-	for (int i = 0; i < OBSTACLE_COUNT; i++) {
-  c8:	2f 5f       	subi	r18, 0xFF	; 255
-  ca:	3f 4f       	sbci	r19, 0xFF	; 255
-  cc:	25 30       	cpi	r18, 0x05	; 5
-  ce:	31 05       	cpc	r19, r1
-  d0:	1c f3       	brlt	.-58     	; 0x98 <is_obstacle+0x6>
-		if (obstacles[i][0] == x && obstacles[i][1] == y) {
-			return 1;
-		}
-	}
-	return 0;
-  d2:	80 e0       	ldi	r24, 0x00	; 0
-  d4:	90 e0       	ldi	r25, 0x00	; 0
-  d6:	08 95       	ret
-
-// Проверка, не пытается ли игрок вступить на препядствие
-int is_obstacle(int x, int y) {
-	for (int i = 0; i < OBSTACLE_COUNT; i++) {
-		if (obstacles[i][0] == x && obstacles[i][1] == y) {
-			return 1;
-  d8:	81 e0       	ldi	r24, 0x01	; 1
-  da:	90 e0       	ldi	r25, 0x00	; 0
-		}
-	}
-	return 0;
-}
-  dc:	08 95       	ret
-
-000000de <shift_register_init>:
-
-
-// Инициализация сдвигового регистра
 void shift_register_init() {
 	DDRD |= (1 << SH_LD) | (1 << CLK);
-  de:	81 b3       	in	r24, 0x11	; 17
-  e0:	8c 60       	ori	r24, 0x0C	; 12
-  e2:	81 bb       	out	0x11, r24	; 17
+  92:	81 b3       	in	r24, 0x11	; 17
+  94:	8c 60       	ori	r24, 0x0C	; 12
+  96:	81 bb       	out	0x11, r24	; 17
 	DDRD &= ~(1 << QH);
-  e4:	81 b3       	in	r24, 0x11	; 17
-  e6:	8f 7e       	andi	r24, 0xEF	; 239
-  e8:	81 bb       	out	0x11, r24	; 17
+  98:	81 b3       	in	r24, 0x11	; 17
+  9a:	8f 7e       	andi	r24, 0xEF	; 239
+  9c:	81 bb       	out	0x11, r24	; 17
 	PORTD |= (1 << SH_LD);
-  ea:	82 b3       	in	r24, 0x12	; 18
-  ec:	84 60       	ori	r24, 0x04	; 4
-  ee:	82 bb       	out	0x12, r24	; 18
+  9e:	82 b3       	in	r24, 0x12	; 18
+  a0:	84 60       	ori	r24, 0x04	; 4
+  a2:	82 bb       	out	0x12, r24	; 18
 	PORTD &= ~(1 << CLK);
-  f0:	82 b3       	in	r24, 0x12	; 18
-  f2:	87 7f       	andi	r24, 0xF7	; 247
-  f4:	82 bb       	out	0x12, r24	; 18
+  a4:	82 b3       	in	r24, 0x12	; 18
+  a6:	87 7f       	andi	r24, 0xF7	; 247
+  a8:	82 bb       	out	0x12, r24	; 18
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  f6:	00 c0       	rjmp	.+0      	; 0xf8 <shift_register_init+0x1a>
-  f8:	00 c0       	rjmp	.+0      	; 0xfa <shift_register_init+0x1c>
-  fa:	00 00       	nop
-  fc:	08 95       	ret
+  aa:	00 c0       	rjmp	.+0      	; 0xac <shift_register_init+0x1a>
+  ac:	00 c0       	rjmp	.+0      	; 0xae <shift_register_init+0x1c>
+  ae:	00 00       	nop
+  b0:	08 95       	ret
 
-000000fe <read_buttons>:
-}
-
-// Чтение состояния кнопок
-uint8_t read_buttons() {
-	uint8_t data = 0;
-	PORTD &= ~(1 << SH_LD);   // Загрузка данных с кнопок
-  fe:	82 b3       	in	r24, 0x12	; 18
- 100:	8b 7f       	andi	r24, 0xFB	; 251
- 102:	82 bb       	out	0x12, r24	; 18
- 104:	00 c0       	rjmp	.+0      	; 0x106 <read_buttons+0x8>
- 106:	00 c0       	rjmp	.+0      	; 0x108 <read_buttons+0xa>
- 108:	00 00       	nop
-	_delay_us(5);
-	PORTD |= (1 << SH_LD);    // Переключение в режим сдвига
- 10a:	82 b3       	in	r24, 0x12	; 18
- 10c:	84 60       	ori	r24, 0x04	; 4
- 10e:	82 bb       	out	0x12, r24	; 18
- 110:	00 c0       	rjmp	.+0      	; 0x112 <read_buttons+0x14>
- 112:	00 c0       	rjmp	.+0      	; 0x114 <read_buttons+0x16>
- 114:	00 00       	nop
-	_delay_us(5);
-
-	for (uint8_t i = 0; i < 8; i++) {
- 116:	20 e0       	ldi	r18, 0x00	; 0
+000000b2 <read_buttons>:
 	_delay_us(5);
 }
 
-// Чтение состояния кнопок
 uint8_t read_buttons() {
 	uint8_t data = 0;
- 118:	80 e0       	ldi	r24, 0x00	; 0
-	PORTD &= ~(1 << SH_LD);   // Загрузка данных с кнопок
+	PORTD &= ~(1 << SH_LD);
+  b2:	82 b3       	in	r24, 0x12	; 18
+  b4:	8b 7f       	andi	r24, 0xFB	; 251
+  b6:	82 bb       	out	0x12, r24	; 18
+  b8:	00 c0       	rjmp	.+0      	; 0xba <read_buttons+0x8>
+  ba:	00 c0       	rjmp	.+0      	; 0xbc <read_buttons+0xa>
+  bc:	00 00       	nop
 	_delay_us(5);
-	PORTD |= (1 << SH_LD);    // Переключение в режим сдвига
+	PORTD |= (1 << SH_LD);
+  be:	82 b3       	in	r24, 0x12	; 18
+  c0:	84 60       	ori	r24, 0x04	; 4
+  c2:	82 bb       	out	0x12, r24	; 18
+  c4:	00 c0       	rjmp	.+0      	; 0xc6 <read_buttons+0x14>
+  c6:	00 c0       	rjmp	.+0      	; 0xc8 <read_buttons+0x16>
+  c8:	00 00       	nop
 	_delay_us(5);
 
 	for (uint8_t i = 0; i < 8; i++) {
- 11a:	0c c0       	rjmp	.+24     	; 0x134 <read_buttons+0x36>
+  ca:	20 e0       	ldi	r18, 0x00	; 0
+	PORTD &= ~(1 << CLK);
+	_delay_us(5);
+}
+
+uint8_t read_buttons() {
+	uint8_t data = 0;
+  cc:	80 e0       	ldi	r24, 0x00	; 0
+	PORTD &= ~(1 << SH_LD);
+	_delay_us(5);
+	PORTD |= (1 << SH_LD);
+	_delay_us(5);
+
+	for (uint8_t i = 0; i < 8; i++) {
+  ce:	0c c0       	rjmp	.+24     	; 0xe8 <read_buttons+0x36>
 		data <<= 1;
- 11c:	88 0f       	add	r24, r24
+  d0:	88 0f       	add	r24, r24
 		if (PIND & (1 << QH)) {
- 11e:	84 99       	sbic	0x10, 4	; 16
+  d2:	84 99       	sbic	0x10, 4	; 16
 			data |= 1;
- 120:	81 60       	ori	r24, 0x01	; 1
+  d4:	81 60       	ori	r24, 0x01	; 1
 		}
 		PORTD |= (1 << CLK);
- 122:	92 b3       	in	r25, 0x12	; 18
- 124:	98 60       	ori	r25, 0x08	; 8
- 126:	92 bb       	out	0x12, r25	; 18
- 128:	00 c0       	rjmp	.+0      	; 0x12a <read_buttons+0x2c>
+  d6:	92 b3       	in	r25, 0x12	; 18
+  d8:	98 60       	ori	r25, 0x08	; 8
+  da:	92 bb       	out	0x12, r25	; 18
+  dc:	00 c0       	rjmp	.+0      	; 0xde <read_buttons+0x2c>
 		_delay_us(2);
 		PORTD &= ~(1 << CLK);
- 12a:	92 b3       	in	r25, 0x12	; 18
- 12c:	97 7f       	andi	r25, 0xF7	; 247
- 12e:	92 bb       	out	0x12, r25	; 18
- 130:	00 c0       	rjmp	.+0      	; 0x132 <read_buttons+0x34>
-	PORTD &= ~(1 << SH_LD);   // Загрузка данных с кнопок
+  de:	92 b3       	in	r25, 0x12	; 18
+  e0:	97 7f       	andi	r25, 0xF7	; 247
+  e2:	92 bb       	out	0x12, r25	; 18
+  e4:	00 c0       	rjmp	.+0      	; 0xe6 <read_buttons+0x34>
+	PORTD &= ~(1 << SH_LD);
 	_delay_us(5);
-	PORTD |= (1 << SH_LD);    // Переключение в режим сдвига
+	PORTD |= (1 << SH_LD);
 	_delay_us(5);
 
 	for (uint8_t i = 0; i < 8; i++) {
- 132:	2f 5f       	subi	r18, 0xFF	; 255
- 134:	28 30       	cpi	r18, 0x08	; 8
- 136:	90 f3       	brcs	.-28     	; 0x11c <read_buttons+0x1e>
+  e6:	2f 5f       	subi	r18, 0xFF	; 255
+  e8:	28 30       	cpi	r18, 0x08	; 8
+  ea:	90 f3       	brcs	.-28     	; 0xd0 <read_buttons+0x1e>
+		_delay_us(2);
 		PORTD &= ~(1 << CLK);
 		_delay_us(2);
 	}
-
 	return data;
-}
- 138:	08 95       	ret
+  ec:	08 95       	ret
 
-0000013a <draw_frame>:
+000000ee <draw_frame>:
+	{3, 4}, {5, 2}, {6, 4}, {8, 3}, {9, 2}
+};
 
-// Отображение рамки
+uint8_t game_lost = 0;
+
 void draw_frame(void) {
- 13a:	cf 93       	push	r28
-	// Верхняя граница начинается с 1-й строки (чтобы не перекрывать координаты)
+  ee:	cf 93       	push	r28
 	for (uint8_t x = 0; x < 12; x++) {
- 13c:	c0 e0       	ldi	r28, 0x00	; 0
- 13e:	08 c0       	rjmp	.+16     	; 0x150 <draw_frame+0x16>
+  f0:	c0 e0       	ldi	r28, 0x00	; 0
+  f2:	08 c0       	rjmp	.+16     	; 0x104 <draw_frame+0x16>
 		pcd8544_set_cursor(x, 1);
- 140:	61 e0       	ldi	r22, 0x01	; 1
- 142:	8c 2f       	mov	r24, r28
- 144:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
+  f4:	61 e0       	ldi	r22, 0x01	; 1
+  f6:	8c 2f       	mov	r24, r28
+  f8:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
 		pcd8544_send_char('#');
- 148:	83 e2       	ldi	r24, 0x23	; 35
- 14a:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
-}
+  fc:	83 e2       	ldi	r24, 0x23	; 35
+  fe:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+};
 
-// Отображение рамки
+uint8_t game_lost = 0;
+
 void draw_frame(void) {
-	// Верхняя граница начинается с 1-й строки (чтобы не перекрывать координаты)
 	for (uint8_t x = 0; x < 12; x++) {
- 14e:	cf 5f       	subi	r28, 0xFF	; 255
- 150:	cc 30       	cpi	r28, 0x0C	; 12
- 152:	b0 f3       	brcs	.-20     	; 0x140 <draw_frame+0x6>
- 154:	c0 e0       	ldi	r28, 0x00	; 0
- 156:	08 c0       	rjmp	.+16     	; 0x168 <draw_frame+0x2e>
+ 102:	cf 5f       	subi	r28, 0xFF	; 255
+ 104:	cc 30       	cpi	r28, 0x0C	; 12
+ 106:	b0 f3       	brcs	.-20     	; 0xf4 <draw_frame+0x6>
+ 108:	c0 e0       	ldi	r28, 0x00	; 0
+ 10a:	08 c0       	rjmp	.+16     	; 0x11c <draw_frame+0x2e>
 		pcd8544_set_cursor(x, 1);
 		pcd8544_send_char('#');
 	}
-	// Нижняя граница
 	for (uint8_t x = 0; x < 12; x++) {
 		pcd8544_set_cursor(x, 5);
- 158:	65 e0       	ldi	r22, 0x05	; 5
- 15a:	8c 2f       	mov	r24, r28
- 15c:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
+ 10c:	65 e0       	ldi	r22, 0x05	; 5
+ 10e:	8c 2f       	mov	r24, r28
+ 110:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
 		pcd8544_send_char('#');
- 160:	83 e2       	ldi	r24, 0x23	; 35
- 162:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+ 114:	83 e2       	ldi	r24, 0x23	; 35
+ 116:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+void draw_frame(void) {
 	for (uint8_t x = 0; x < 12; x++) {
 		pcd8544_set_cursor(x, 1);
 		pcd8544_send_char('#');
 	}
-	// Нижняя граница
 	for (uint8_t x = 0; x < 12; x++) {
- 166:	cf 5f       	subi	r28, 0xFF	; 255
- 168:	cc 30       	cpi	r28, 0x0C	; 12
- 16a:	b0 f3       	brcs	.-20     	; 0x158 <draw_frame+0x1e>
- 16c:	c1 e0       	ldi	r28, 0x01	; 1
- 16e:	0f c0       	rjmp	.+30     	; 0x18e <draw_frame+0x54>
+ 11a:	cf 5f       	subi	r28, 0xFF	; 255
+ 11c:	cc 30       	cpi	r28, 0x0C	; 12
+ 11e:	b0 f3       	brcs	.-20     	; 0x10c <draw_frame+0x1e>
+ 120:	c1 e0       	ldi	r28, 0x01	; 1
+ 122:	0f c0       	rjmp	.+30     	; 0x142 <draw_frame+0x54>
 		pcd8544_set_cursor(x, 5);
 		pcd8544_send_char('#');
 	}
-	// Левая и правая границы
 	for (uint8_t y = 1; y < 5; y++) {
 		pcd8544_set_cursor(0, y);
- 170:	6c 2f       	mov	r22, r28
- 172:	80 e0       	ldi	r24, 0x00	; 0
- 174:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
+ 124:	6c 2f       	mov	r22, r28
+ 126:	80 e0       	ldi	r24, 0x00	; 0
+ 128:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
 		pcd8544_send_char('#');
- 178:	83 e2       	ldi	r24, 0x23	; 35
- 17a:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+ 12c:	83 e2       	ldi	r24, 0x23	; 35
+ 12e:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
 		pcd8544_set_cursor(11, y);
- 17e:	6c 2f       	mov	r22, r28
- 180:	8b e0       	ldi	r24, 0x0B	; 11
- 182:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
+ 132:	6c 2f       	mov	r22, r28
+ 134:	8b e0       	ldi	r24, 0x0B	; 11
+ 136:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
 		pcd8544_send_char('#');
- 186:	83 e2       	ldi	r24, 0x23	; 35
- 188:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+ 13a:	83 e2       	ldi	r24, 0x23	; 35
+ 13c:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+	}
 	for (uint8_t x = 0; x < 12; x++) {
 		pcd8544_set_cursor(x, 5);
 		pcd8544_send_char('#');
 	}
-	// Левая и правая границы
 	for (uint8_t y = 1; y < 5; y++) {
- 18c:	cf 5f       	subi	r28, 0xFF	; 255
- 18e:	c5 30       	cpi	r28, 0x05	; 5
- 190:	78 f3       	brcs	.-34     	; 0x170 <draw_frame+0x36>
+ 140:	cf 5f       	subi	r28, 0xFF	; 255
+ 142:	c5 30       	cpi	r28, 0x05	; 5
+ 144:	78 f3       	brcs	.-34     	; 0x124 <draw_frame+0x36>
 		pcd8544_set_cursor(0, y);
 		pcd8544_send_char('#');
 		pcd8544_set_cursor(11, y);
 		pcd8544_send_char('#');
 	}
 }
- 192:	cf 91       	pop	r28
- 194:	08 95       	ret
+ 146:	cf 91       	pop	r28
+ 148:	08 95       	ret
 
-00000196 <display_coordinates>:
+0000014a <draw_obstacles>:
 
-// Отображение координат
+void draw_obstacles(void) {
+ 14a:	cf 93       	push	r28
+ 14c:	df 93       	push	r29
+	for (int i = 0; i < OBSTACLE_COUNT; i++) {
+ 14e:	c0 e0       	ldi	r28, 0x00	; 0
+ 150:	d0 e0       	ldi	r29, 0x00	; 0
+ 152:	0f c0       	rjmp	.+30     	; 0x172 <draw_obstacles+0x28>
+		uint8_t ox = obstacles[i][0];
+ 154:	fe 01       	movw	r30, r28
+ 156:	ee 0f       	add	r30, r30
+ 158:	ff 1f       	adc	r31, r31
+ 15a:	ee 0f       	add	r30, r30
+ 15c:	ff 1f       	adc	r31, r31
+ 15e:	e0 5a       	subi	r30, 0xA0	; 160
+ 160:	ff 4f       	sbci	r31, 0xFF	; 255
+		uint8_t oy = obstacles[i][1];
+ 162:	62 81       	ldd	r22, Z+2	; 0x02
+		pcd8544_set_cursor(ox, oy);
+ 164:	80 81       	ld	r24, Z
+ 166:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
+		pcd8544_send_char('@');
+ 16a:	80 e4       	ldi	r24, 0x40	; 64
+ 16c:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
+		pcd8544_send_char('#');
+	}
+}
+
+void draw_obstacles(void) {
+	for (int i = 0; i < OBSTACLE_COUNT; i++) {
+ 170:	21 96       	adiw	r28, 0x01	; 1
+ 172:	c5 30       	cpi	r28, 0x05	; 5
+ 174:	d1 05       	cpc	r29, r1
+ 176:	74 f3       	brlt	.-36     	; 0x154 <draw_obstacles+0xa>
+		uint8_t ox = obstacles[i][0];
+		uint8_t oy = obstacles[i][1];
+		pcd8544_set_cursor(ox, oy);
+		pcd8544_send_char('@');
+	}
+}
+ 178:	df 91       	pop	r29
+ 17a:	cf 91       	pop	r28
+ 17c:	08 95       	ret
+
+0000017e <is_obstacle>:
+
+int is_obstacle(int x, int y) {
+	for (int i = 0; i < OBSTACLE_COUNT; i++) {
+ 17e:	20 e0       	ldi	r18, 0x00	; 0
+ 180:	30 e0       	ldi	r19, 0x00	; 0
+ 182:	1a c0       	rjmp	.+52     	; 0x1b8 <is_obstacle+0x3a>
+		if (obstacles[i][0] == x && obstacles[i][1] == y) {
+ 184:	f9 01       	movw	r30, r18
+ 186:	ee 0f       	add	r30, r30
+ 188:	ff 1f       	adc	r31, r31
+ 18a:	ee 0f       	add	r30, r30
+ 18c:	ff 1f       	adc	r31, r31
+ 18e:	e0 5a       	subi	r30, 0xA0	; 160
+ 190:	ff 4f       	sbci	r31, 0xFF	; 255
+ 192:	40 81       	ld	r20, Z
+ 194:	51 81       	ldd	r21, Z+1	; 0x01
+ 196:	48 17       	cp	r20, r24
+ 198:	59 07       	cpc	r21, r25
+ 19a:	61 f4       	brne	.+24     	; 0x1b4 <is_obstacle+0x36>
+ 19c:	f9 01       	movw	r30, r18
+ 19e:	ee 0f       	add	r30, r30
+ 1a0:	ff 1f       	adc	r31, r31
+ 1a2:	ee 0f       	add	r30, r30
+ 1a4:	ff 1f       	adc	r31, r31
+ 1a6:	e0 5a       	subi	r30, 0xA0	; 160
+ 1a8:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1aa:	42 81       	ldd	r20, Z+2	; 0x02
+ 1ac:	53 81       	ldd	r21, Z+3	; 0x03
+ 1ae:	46 17       	cp	r20, r22
+ 1b0:	57 07       	cpc	r21, r23
+ 1b2:	41 f0       	breq	.+16     	; 0x1c4 <is_obstacle+0x46>
+		pcd8544_send_char('@');
+	}
+}
+
+int is_obstacle(int x, int y) {
+	for (int i = 0; i < OBSTACLE_COUNT; i++) {
+ 1b4:	2f 5f       	subi	r18, 0xFF	; 255
+ 1b6:	3f 4f       	sbci	r19, 0xFF	; 255
+ 1b8:	25 30       	cpi	r18, 0x05	; 5
+ 1ba:	31 05       	cpc	r19, r1
+ 1bc:	1c f3       	brlt	.-58     	; 0x184 <is_obstacle+0x6>
+		if (obstacles[i][0] == x && obstacles[i][1] == y) {
+			return 1;
+		}
+	}
+	return 0;
+ 1be:	80 e0       	ldi	r24, 0x00	; 0
+ 1c0:	90 e0       	ldi	r25, 0x00	; 0
+ 1c2:	08 95       	ret
+}
+
+int is_obstacle(int x, int y) {
+	for (int i = 0; i < OBSTACLE_COUNT; i++) {
+		if (obstacles[i][0] == x && obstacles[i][1] == y) {
+			return 1;
+ 1c4:	81 e0       	ldi	r24, 0x01	; 1
+ 1c6:	90 e0       	ldi	r25, 0x00	; 0
+		}
+	}
+	return 0;
+}
+ 1c8:	08 95       	ret
+
+000001ca <display_coordinates>:
+
 void display_coordinates(uint8_t x, uint8_t y) {
- 196:	0f 93       	push	r16
- 198:	1f 93       	push	r17
- 19a:	cf 93       	push	r28
- 19c:	df 93       	push	r29
- 19e:	cd b7       	in	r28, 0x3d	; 61
- 1a0:	de b7       	in	r29, 0x3e	; 62
- 1a2:	60 97       	sbiw	r28, 0x10	; 16
- 1a4:	0f b6       	in	r0, 0x3f	; 63
- 1a6:	f8 94       	cli
- 1a8:	de bf       	out	0x3e, r29	; 62
- 1aa:	0f be       	out	0x3f, r0	; 63
- 1ac:	cd bf       	out	0x3d, r28	; 61
+ 1ca:	0f 93       	push	r16
+ 1cc:	1f 93       	push	r17
+ 1ce:	cf 93       	push	r28
+ 1d0:	df 93       	push	r29
+ 1d2:	cd b7       	in	r28, 0x3d	; 61
+ 1d4:	de b7       	in	r29, 0x3e	; 62
+ 1d6:	60 97       	sbiw	r28, 0x10	; 16
+ 1d8:	0f b6       	in	r0, 0x3f	; 63
+ 1da:	f8 94       	cli
+ 1dc:	de bf       	out	0x3e, r29	; 62
+ 1de:	0f be       	out	0x3f, r0	; 63
+ 1e0:	cd bf       	out	0x3d, r28	; 61
 	char buffer[16];
-	// Форматируем строку как "X: 01 Y: 01" с двумя знаками для каждого числа
-	sprintf(buffer, "X: %02d Y: %02d", x, y);
- 1ae:	1f 92       	push	r1
- 1b0:	6f 93       	push	r22
- 1b2:	1f 92       	push	r1
- 1b4:	8f 93       	push	r24
- 1b6:	84 e7       	ldi	r24, 0x74	; 116
- 1b8:	90 e0       	ldi	r25, 0x00	; 0
- 1ba:	9f 93       	push	r25
- 1bc:	8f 93       	push	r24
- 1be:	8e 01       	movw	r16, r28
- 1c0:	0f 5f       	subi	r16, 0xFF	; 255
- 1c2:	1f 4f       	sbci	r17, 0xFF	; 255
- 1c4:	1f 93       	push	r17
- 1c6:	0f 93       	push	r16
- 1c8:	0e 94 0b 03 	call	0x616	; 0x616 <sprintf>
+	sprintf(buffer, "X: %02d  Y: %02d", x, y);
+ 1e2:	1f 92       	push	r1
+ 1e4:	6f 93       	push	r22
+ 1e6:	1f 92       	push	r1
+ 1e8:	8f 93       	push	r24
+ 1ea:	84 e7       	ldi	r24, 0x74	; 116
+ 1ec:	90 e0       	ldi	r25, 0x00	; 0
+ 1ee:	9f 93       	push	r25
+ 1f0:	8f 93       	push	r24
+ 1f2:	8e 01       	movw	r16, r28
+ 1f4:	0f 5f       	subi	r16, 0xFF	; 255
+ 1f6:	1f 4f       	sbci	r17, 0xFF	; 255
+ 1f8:	1f 93       	push	r17
+ 1fa:	0f 93       	push	r16
+ 1fc:	0e 94 0b 03 	call	0x616	; 0x616 <sprintf>
 	pcd8544_print_at(buffer, 0, 0);
- 1cc:	40 e0       	ldi	r20, 0x00	; 0
- 1ce:	60 e0       	ldi	r22, 0x00	; 0
- 1d0:	c8 01       	movw	r24, r16
- 1d2:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
+ 200:	40 e0       	ldi	r20, 0x00	; 0
+ 202:	60 e0       	ldi	r22, 0x00	; 0
+ 204:	c8 01       	movw	r24, r16
+ 206:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
 }
- 1d6:	0f b6       	in	r0, 0x3f	; 63
- 1d8:	f8 94       	cli
- 1da:	de bf       	out	0x3e, r29	; 62
- 1dc:	0f be       	out	0x3f, r0	; 63
- 1de:	cd bf       	out	0x3d, r28	; 61
- 1e0:	60 96       	adiw	r28, 0x10	; 16
- 1e2:	0f b6       	in	r0, 0x3f	; 63
- 1e4:	f8 94       	cli
- 1e6:	de bf       	out	0x3e, r29	; 62
- 1e8:	0f be       	out	0x3f, r0	; 63
- 1ea:	cd bf       	out	0x3d, r28	; 61
- 1ec:	df 91       	pop	r29
- 1ee:	cf 91       	pop	r28
- 1f0:	1f 91       	pop	r17
- 1f2:	0f 91       	pop	r16
- 1f4:	08 95       	ret
+ 20a:	0f b6       	in	r0, 0x3f	; 63
+ 20c:	f8 94       	cli
+ 20e:	de bf       	out	0x3e, r29	; 62
+ 210:	0f be       	out	0x3f, r0	; 63
+ 212:	cd bf       	out	0x3d, r28	; 61
+ 214:	60 96       	adiw	r28, 0x10	; 16
+ 216:	0f b6       	in	r0, 0x3f	; 63
+ 218:	f8 94       	cli
+ 21a:	de bf       	out	0x3e, r29	; 62
+ 21c:	0f be       	out	0x3f, r0	; 63
+ 21e:	cd bf       	out	0x3d, r28	; 61
+ 220:	df 91       	pop	r29
+ 222:	cf 91       	pop	r28
+ 224:	1f 91       	pop	r17
+ 226:	0f 91       	pop	r16
+ 228:	08 95       	ret
 
-000001f6 <display_win_message>:
+0000022a <display_win_message>:
 
-// Отображение сообщения о победе
 void display_win_message(void) {
-	pcd8544_print_at("You Win!", 4, 2);  // Сообщение о победе на экране
- 1f6:	42 e0       	ldi	r20, 0x02	; 2
- 1f8:	64 e0       	ldi	r22, 0x04	; 4
- 1fa:	84 e8       	ldi	r24, 0x84	; 132
- 1fc:	90 e0       	ldi	r25, 0x00	; 0
- 1fe:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
- 202:	08 95       	ret
+	pcd8544_print_at("You Win!", 4, 2);
+ 22a:	42 e0       	ldi	r20, 0x02	; 2
+ 22c:	64 e0       	ldi	r22, 0x04	; 4
+ 22e:	85 e8       	ldi	r24, 0x85	; 133
+ 230:	90 e0       	ldi	r25, 0x00	; 0
+ 232:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
+ 236:	08 95       	ret
 
-00000204 <display_lose_message>:
+00000238 <display_lose_message>:
 }
 
 void display_lose_message(void) {
-	pcd8544_print_at("Game Over!", 3, 2);
- 204:	42 e0       	ldi	r20, 0x02	; 2
- 206:	63 e0       	ldi	r22, 0x03	; 3
- 208:	8d e8       	ldi	r24, 0x8D	; 141
- 20a:	90 e0       	ldi	r25, 0x00	; 0
- 20c:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
- 210:	08 95       	ret
+	pcd8544_print_at("Game Over!", 2, 2);
+ 238:	42 e0       	ldi	r20, 0x02	; 2
+ 23a:	62 e0       	ldi	r22, 0x02	; 2
+ 23c:	8e e8       	ldi	r24, 0x8E	; 142
+ 23e:	90 e0       	ldi	r25, 0x00	; 0
+ 240:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
+ 244:	08 95       	ret
 
-00000212 <display_timer>:
+00000246 <display_timer>:
 }
 
-// Отображение таймера отсчета
 void display_timer(uint8_t time_left) {
- 212:	0f 93       	push	r16
- 214:	1f 93       	push	r17
- 216:	cf 93       	push	r28
- 218:	df 93       	push	r29
- 21a:	cd b7       	in	r28, 0x3d	; 61
- 21c:	de b7       	in	r29, 0x3e	; 62
- 21e:	60 97       	sbiw	r28, 0x10	; 16
- 220:	0f b6       	in	r0, 0x3f	; 63
- 222:	f8 94       	cli
- 224:	de bf       	out	0x3e, r29	; 62
- 226:	0f be       	out	0x3f, r0	; 63
- 228:	cd bf       	out	0x3d, r28	; 61
+ 246:	0f 93       	push	r16
+ 248:	1f 93       	push	r17
+ 24a:	cf 93       	push	r28
+ 24c:	df 93       	push	r29
+ 24e:	cd b7       	in	r28, 0x3d	; 61
+ 250:	de b7       	in	r29, 0x3e	; 62
+ 252:	60 97       	sbiw	r28, 0x10	; 16
+ 254:	0f b6       	in	r0, 0x3f	; 63
+ 256:	f8 94       	cli
+ 258:	de bf       	out	0x3e, r29	; 62
+ 25a:	0f be       	out	0x3f, r0	; 63
+ 25c:	cd bf       	out	0x3d, r28	; 61
 	char buffer[16];
 	sprintf(buffer, "Next in: %d", time_left);
- 22a:	1f 92       	push	r1
- 22c:	8f 93       	push	r24
- 22e:	88 e9       	ldi	r24, 0x98	; 152
- 230:	90 e0       	ldi	r25, 0x00	; 0
- 232:	9f 93       	push	r25
- 234:	8f 93       	push	r24
- 236:	8e 01       	movw	r16, r28
- 238:	0f 5f       	subi	r16, 0xFF	; 255
- 23a:	1f 4f       	sbci	r17, 0xFF	; 255
- 23c:	1f 93       	push	r17
- 23e:	0f 93       	push	r16
- 240:	0e 94 0b 03 	call	0x616	; 0x616 <sprintf>
-	pcd8544_print_at(buffer, 0, 4);  // Таймер будет внизу экрана
- 244:	44 e0       	ldi	r20, 0x04	; 4
- 246:	60 e0       	ldi	r22, 0x00	; 0
- 248:	c8 01       	movw	r24, r16
- 24a:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
+ 25e:	1f 92       	push	r1
+ 260:	8f 93       	push	r24
+ 262:	89 e9       	ldi	r24, 0x99	; 153
+ 264:	90 e0       	ldi	r25, 0x00	; 0
+ 266:	9f 93       	push	r25
+ 268:	8f 93       	push	r24
+ 26a:	8e 01       	movw	r16, r28
+ 26c:	0f 5f       	subi	r16, 0xFF	; 255
+ 26e:	1f 4f       	sbci	r17, 0xFF	; 255
+ 270:	1f 93       	push	r17
+ 272:	0f 93       	push	r16
+ 274:	0e 94 0b 03 	call	0x616	; 0x616 <sprintf>
+	pcd8544_print_at(buffer, 0, 4);
+ 278:	44 e0       	ldi	r20, 0x04	; 4
+ 27a:	60 e0       	ldi	r22, 0x00	; 0
+ 27c:	c8 01       	movw	r24, r16
+ 27e:	0e 94 fa 02 	call	0x5f4	; 0x5f4 <pcd8544_print_at>
 }
- 24e:	0f 90       	pop	r0
- 250:	0f 90       	pop	r0
- 252:	0f 90       	pop	r0
- 254:	0f 90       	pop	r0
- 256:	0f 90       	pop	r0
- 258:	0f 90       	pop	r0
- 25a:	60 96       	adiw	r28, 0x10	; 16
- 25c:	0f b6       	in	r0, 0x3f	; 63
- 25e:	f8 94       	cli
- 260:	de bf       	out	0x3e, r29	; 62
- 262:	0f be       	out	0x3f, r0	; 63
- 264:	cd bf       	out	0x3d, r28	; 61
- 266:	df 91       	pop	r29
- 268:	cf 91       	pop	r28
- 26a:	1f 91       	pop	r17
- 26c:	0f 91       	pop	r16
- 26e:	08 95       	ret
-
-00000270 <draw_obstacles>:
-
-// Отрисовка препятствий
-void draw_obstacles() {
- 270:	cf 93       	push	r28
- 272:	df 93       	push	r29
-	for (int i = 0; i < OBSTACLE_COUNT; i++) {
- 274:	c0 e0       	ldi	r28, 0x00	; 0
- 276:	d0 e0       	ldi	r29, 0x00	; 0
- 278:	0f c0       	rjmp	.+30     	; 0x298 <draw_obstacles+0x28>
-		uint8_t ox = obstacles[i][0];
- 27a:	fe 01       	movw	r30, r28
- 27c:	ee 0f       	add	r30, r30
- 27e:	ff 1f       	adc	r31, r31
- 280:	ee 0f       	add	r30, r30
- 282:	ff 1f       	adc	r31, r31
- 284:	e0 5a       	subi	r30, 0xA0	; 160
- 286:	ff 4f       	sbci	r31, 0xFF	; 255
-		uint8_t oy = obstacles[i][1];
- 288:	62 81       	ldd	r22, Z+2	; 0x02
-		pcd8544_set_cursor(ox, oy);
- 28a:	80 81       	ld	r24, Z
- 28c:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
-		pcd8544_send_char('@');  // Символ препятствия
- 290:	80 e4       	ldi	r24, 0x40	; 64
- 292:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
-	pcd8544_print_at(buffer, 0, 4);  // Таймер будет внизу экрана
-}
-
-// Отрисовка препятствий
-void draw_obstacles() {
-	for (int i = 0; i < OBSTACLE_COUNT; i++) {
- 296:	21 96       	adiw	r28, 0x01	; 1
- 298:	c5 30       	cpi	r28, 0x05	; 5
- 29a:	d1 05       	cpc	r29, r1
- 29c:	74 f3       	brlt	.-36     	; 0x27a <draw_obstacles+0xa>
-		uint8_t ox = obstacles[i][0];
-		uint8_t oy = obstacles[i][1];
-		pcd8544_set_cursor(ox, oy);
-		pcd8544_send_char('@');  // Символ препятствия
-	}
-}
- 29e:	df 91       	pop	r29
- 2a0:	cf 91       	pop	r28
+ 282:	0f 90       	pop	r0
+ 284:	0f 90       	pop	r0
+ 286:	0f 90       	pop	r0
+ 288:	0f 90       	pop	r0
+ 28a:	0f 90       	pop	r0
+ 28c:	0f 90       	pop	r0
+ 28e:	60 96       	adiw	r28, 0x10	; 16
+ 290:	0f b6       	in	r0, 0x3f	; 63
+ 292:	f8 94       	cli
+ 294:	de bf       	out	0x3e, r29	; 62
+ 296:	0f be       	out	0x3f, r0	; 63
+ 298:	cd bf       	out	0x3d, r28	; 61
+ 29a:	df 91       	pop	r29
+ 29c:	cf 91       	pop	r28
+ 29e:	1f 91       	pop	r17
+ 2a0:	0f 91       	pop	r16
  2a2:	08 95       	ret
 
 000002a4 <reset_game>:
 
-// Сброс игры и создание карты
 void reset_game(uint8_t *x, uint8_t *y, uint8_t *game_won) {
  2a4:	ef 92       	push	r14
  2a6:	ff 92       	push	r15
@@ -557,27 +548,25 @@ void reset_game(uint8_t *x, uint8_t *y, uint8_t *game_won) {
  2ba:	84 e0       	ldi	r24, 0x04	; 4
  2bc:	fb 01       	movw	r30, r22
  2be:	80 83       	st	Z, r24
-
 	pcd8544_clear();
  2c0:	0e 94 bd 02 	call	0x57a	; 0x57a <pcd8544_clear>
 	draw_frame();
- 2c4:	0e 94 9d 00 	call	0x13a	; 0x13a <draw_frame>
-	draw_obstacles(); // ? добавлена отрисовка препятствий
- 2c8:	0e 94 38 01 	call	0x270	; 0x270 <draw_obstacles>
+ 2c4:	0e 94 77 00 	call	0xee	; 0xee <draw_frame>
+	draw_obstacles();
+ 2c8:	0e 94 a5 00 	call	0x14a	; 0x14a <draw_obstacles>
 	display_coordinates(*x, *y);
  2cc:	f8 01       	movw	r30, r16
  2ce:	60 81       	ld	r22, Z
  2d0:	88 81       	ld	r24, Y
- 2d2:	0e 94 cb 00 	call	0x196	; 0x196 <display_coordinates>
+ 2d2:	0e 94 e5 00 	call	0x1ca	; 0x1ca <display_coordinates>
 
 	uint8_t target_x = 10, target_y = 2;
-
 	pcd8544_set_cursor(target_x, target_y);
  2d6:	62 e0       	ldi	r22, 0x02	; 2
  2d8:	8a e0       	ldi	r24, 0x0A	; 10
  2da:	0e 94 ce 02 	call	0x59c	; 0x59c <pcd8544_set_cursor>
-	pcd8544_send_char('X');  // Целевая точка
- 2de:	88 e5       	ldi	r24, 0x58	; 88
+	pcd8544_send_char('$');
+ 2de:	84 e2       	ldi	r24, 0x24	; 36
  2e0:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
 
 	pcd8544_set_cursor(*x, *y);
@@ -593,7 +582,7 @@ void reset_game(uint8_t *x, uint8_t *y, uint8_t *game_won) {
  2f4:	f7 01       	movw	r30, r14
  2f6:	10 82       	st	Z, r1
 	game_lost = 0;
- 2f8:	10 92 84 02 	sts	0x0284, r1	; 0x800284 <__data_end>
+ 2f8:	10 92 86 02 	sts	0x0286, r1	; 0x800286 <__data_end>
 }
  2fc:	df 91       	pop	r29
  2fe:	cf 91       	pop	r28
@@ -604,6 +593,10 @@ void reset_game(uint8_t *x, uint8_t *y, uint8_t *game_won) {
  308:	08 95       	ret
 
 0000030a <main>:
+#include "game.h"
+
+#include <util/delay.h>
+#include <avr/io.h>
 
 int main(void) {
  30a:	cf 93       	push	r28
@@ -617,7 +610,7 @@ int main(void) {
 	pcd8544_clear();
  31a:	0e 94 bd 02 	call	0x57a	; 0x57a <pcd8544_clear>
 	shift_register_init();
- 31e:	0e 94 6f 00 	call	0xde	; 0xde <shift_register_init>
+ 31e:	0e 94 49 00 	call	0x92	; 0x92 <shift_register_init>
 
 	uint8_t x = 1, y = 4;
  322:	81 e0       	ldi	r24, 0x01	; 1
@@ -654,17 +647,17 @@ int main(void) {
 
 	while (1) {
 		if (game_lost) {
- 346:	80 91 84 02 	lds	r24, 0x0284	; 0x800284 <__data_end>
+ 346:	80 91 86 02 	lds	r24, 0x0286	; 0x800286 <__data_end>
  34a:	88 23       	and	r24, r24
  34c:	01 f1       	breq	.+64     	; 0x38e <main+0x84>
 			display_lose_message();
- 34e:	0e 94 02 01 	call	0x204	; 0x204 <display_lose_message>
+ 34e:	0e 94 1c 01 	call	0x238	; 0x238 <display_lose_message>
 			for (uint8_t i = 3; i > 0; i--) {
  352:	13 e0       	ldi	r17, 0x03	; 3
  354:	0d c0       	rjmp	.+26     	; 0x370 <main+0x66>
 				display_timer(i);
  356:	81 2f       	mov	r24, r17
- 358:	0e 94 09 01 	call	0x212	; 0x212 <display_timer>
+ 358:	0e 94 23 01 	call	0x246	; 0x246 <display_timer>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
@@ -710,7 +703,7 @@ int main(void) {
 			continue;
  38c:	dc cf       	rjmp	.-72     	; 0x346 <main+0x3c>
 		}
-		
+
 		if (x == 10 && y == 2 && !game_won) {
  38e:	89 81       	ldd	r24, Y+1	; 0x01
  390:	8a 30       	cpi	r24, 0x0A	; 10
@@ -732,14 +725,13 @@ int main(void) {
  3a6:	88 23       	and	r24, r24
  3a8:	f1 f0       	breq	.+60     	; 0x3e6 <main+0xdc>
 			display_win_message();
- 3aa:	0e 94 fb 00 	call	0x1f6	; 0x1f6 <display_win_message>
-
+ 3aa:	0e 94 15 01 	call	0x22a	; 0x22a <display_win_message>
 			for (uint8_t i = 3; i > 0; i--) {
  3ae:	13 e0       	ldi	r17, 0x03	; 3
  3b0:	0d c0       	rjmp	.+26     	; 0x3cc <main+0xc2>
 				display_timer(i);
  3b2:	81 2f       	mov	r24, r17
- 3b4:	0e 94 09 01 	call	0x212	; 0x212 <display_timer>
+ 3b4:	0e 94 23 01 	call	0x246	; 0x246 <display_timer>
  3b8:	2f e3       	ldi	r18, 0x3F	; 63
  3ba:	8d e0       	ldi	r24, 0x0D	; 13
  3bc:	93 e0       	ldi	r25, 0x03	; 3
@@ -749,11 +741,11 @@ int main(void) {
  3c4:	e1 f7       	brne	.-8      	; 0x3be <main+0xb4>
  3c6:	00 c0       	rjmp	.+0      	; 0x3c8 <main+0xbe>
  3c8:	00 00       	nop
+			display_updated = 0;
 		}
 
 		if (game_won) {
 			display_win_message();
-
 			for (uint8_t i = 3; i > 0; i--) {
  3ca:	11 50       	subi	r17, 0x01	; 1
  3cc:	11 11       	cpse	r17, r1
@@ -778,7 +770,7 @@ int main(void) {
 		}
 
 		uint8_t btns = read_buttons();
- 3e6:	0e 94 7f 00 	call	0xfe	; 0xfe <read_buttons>
+ 3e6:	0e 94 59 00 	call	0xb2	; 0xb2 <read_buttons>
 		uint8_t next_x = x;
  3ea:	f9 80       	ldd	r15, Y+1	; 0x01
 		uint8_t next_y = y;
@@ -814,18 +806,17 @@ int main(void) {
  41c:	08 f0       	brcs	.+2      	; 0x420 <__DATA_REGION_LENGTH__+0x20>
  41e:	f3 94       	inc	r15
 
-		// Новая проверка: не наступаем на препятствие
 		if (is_obstacle(next_x, next_y)) {
  420:	61 2f       	mov	r22, r17
  422:	70 e0       	ldi	r23, 0x00	; 0
  424:	8f 2d       	mov	r24, r15
  426:	90 e0       	ldi	r25, 0x00	; 0
- 428:	0e 94 49 00 	call	0x92	; 0x92 <is_obstacle>
+ 428:	0e 94 bf 00 	call	0x17e	; 0x17e <is_obstacle>
  42c:	89 2b       	or	r24, r25
  42e:	21 f0       	breq	.+8      	; 0x438 <__DATA_REGION_LENGTH__+0x38>
 			game_lost = 1;
  430:	81 e0       	ldi	r24, 0x01	; 1
- 432:	80 93 84 02 	sts	0x0284, r24	; 0x800284 <__data_end>
+ 432:	80 93 86 02 	sts	0x0286, r24	; 0x800286 <__data_end>
 			display_updated = 0;
 			continue;
  436:	87 cf       	rjmp	.-242    	; 0x346 <main+0x3c>
@@ -834,7 +825,6 @@ int main(void) {
  43a:	02 c0       	rjmp	.+4      	; 0x440 <__DATA_REGION_LENGTH__+0x40>
  43c:	01 17       	cp	r16, r17
  43e:	59 f1       	breq	.+86     	; 0x496 <__stack+0x37>
-
 			pcd8544_set_cursor(last_x, last_y);
  440:	60 2f       	mov	r22, r16
  442:	8e 2d       	mov	r24, r14
@@ -845,8 +835,8 @@ int main(void) {
  44c:	06 c0       	rjmp	.+12     	; 0x45a <__DATA_REGION_LENGTH__+0x5a>
  44e:	02 30       	cpi	r16, 0x02	; 2
  450:	21 f4       	brne	.+8      	; 0x45a <__DATA_REGION_LENGTH__+0x5a>
-				pcd8544_send_char('X');
- 452:	88 e5       	ldi	r24, 0x58	; 88
+				pcd8544_send_char('$');
+ 452:	84 e2       	ldi	r24, 0x24	; 36
  454:	0e 94 8f 02 	call	0x51e	; 0x51e <pcd8544_send_char>
  458:	0f c0       	rjmp	.+30     	; 0x478 <__stack+0x19>
 				} else if (is_obstacle(last_x, last_y)) {
@@ -854,7 +844,7 @@ int main(void) {
  45c:	70 e0       	ldi	r23, 0x00	; 0
  45e:	8e 2d       	mov	r24, r14
  460:	90 e0       	ldi	r25, 0x00	; 0
- 462:	0e 94 49 00 	call	0x92	; 0x92 <is_obstacle>
+ 462:	0e 94 bf 00 	call	0x17e	; 0x17e <is_obstacle>
  466:	89 2b       	or	r24, r25
  468:	21 f0       	breq	.+8      	; 0x472 <__stack+0x13>
 				pcd8544_send_char('@');
@@ -883,7 +873,7 @@ int main(void) {
 			display_coordinates(x, y);
  48a:	6a 81       	ldd	r22, Y+2	; 0x02
  48c:	89 81       	ldd	r24, Y+1	; 0x01
- 48e:	0e 94 cb 00 	call	0x196	; 0x196 <display_coordinates>
+ 48e:	0e 94 e5 00 	call	0x1ca	; 0x1ca <display_coordinates>
 
 			last_x = x;
  492:	e9 80       	ldd	r14, Y+1	; 0x01
@@ -988,7 +978,7 @@ void pcd8544_print_string(char *str) {
  54c:	ff 1f       	adc	r31, r31
  54e:	e2 0f       	add	r30, r18
  550:	f3 1f       	adc	r31, r19
- 552:	ec 55       	subi	r30, 0x5C	; 92
+ 552:	eb 55       	subi	r30, 0x5B	; 91
  554:	ff 4f       	sbci	r31, 0xFF	; 255
  556:	ec 0f       	add	r30, r28
  558:	fd 1f       	adc	r31, r29

@@ -120,18 +120,32 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="buttons.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="buttons.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="pcd8544.c">
+    <Compile Include="nokia-lcd.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="pcd8544.h">
+    <Compile Include="nokia-lcd.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="pcd8544_font.h">
+    <Compile Include="font.h">
       <SubType>compile</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game.h">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

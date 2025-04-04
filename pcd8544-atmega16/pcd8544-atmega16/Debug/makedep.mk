@@ -2,7 +2,11 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+buttons.c
+
+game.c
+
 main.c
 
-pcd8544.c
+nokia-lcd.c
 
