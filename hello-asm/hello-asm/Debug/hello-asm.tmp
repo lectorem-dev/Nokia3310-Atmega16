@@ -1,0 +1,34 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega16"</DEVICE>
+ <WORKING_DIR>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m16def.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\Debug\hello-asm.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>hello-asm.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>hello-asm.map</FILE>
+  <FILE>hello-asm.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <main><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>47</LINE></main>
+  <send><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>20</LINE></send>
+  <send_loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>27</LINE></send_loop>
+  <delay><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>95</LINE></delay>
+  <hello><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>105</LINE></hello>
+  <print_loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>80</LINE></print_loop>
+  <loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>89</LINE></loop>
+  <delay_loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>97</LINE></delay_loop>
+ </LABELS>
+</ASSEMBLER_INFO>

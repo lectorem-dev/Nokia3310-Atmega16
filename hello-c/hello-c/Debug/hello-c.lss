@@ -1,0 +1,289 @@
+
+hello-c.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000176  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000001a  00800060  00000176  000001ea  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000204  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000234  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000028  00000000  00000000  00000270  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000007e3  00000000  00000000  00000298  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000065f  00000000  00000000  00000a7b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000338  00000000  00000000  000010da  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000034  00000000  00000000  00001414  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000356  00000000  00000000  00001448  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000ff  00000000  00000000  0000179e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000030  00000000  00000000  0000189d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	e6 e7       	ldi	r30, 0x76	; 118
+  68:	f1 e0       	ldi	r31, 0x01	; 1
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+  70:	aa 37       	cpi	r26, 0x7A	; 122
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+  76:	0e 94 66 00 	call	0xcc	; 0xcc <main>
+  7a:	0c 94 b9 00 	jmp	0x172	; 0x172 <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <send>:
+	{0x00, 0x41, 0x7F, 0x40, 0x00}, // l
+	{0x38, 0x44, 0x44, 0x44, 0x38}  // o
+};
+
+void send(uint8_t dc, uint8_t data) {
+	if (dc)
+  82:	88 23       	and	r24, r24
+  84:	21 f0       	breq	.+8      	; 0x8e <send+0xc>
+	PORTB |= (1 << PIN_DC);
+  86:	88 b3       	in	r24, 0x18	; 24
+  88:	88 60       	ori	r24, 0x08	; 8
+  8a:	88 bb       	out	0x18, r24	; 24
+  8c:	03 c0       	rjmp	.+6      	; 0x94 <send+0x12>
+	else
+	PORTB &= ~(1 << PIN_DC);
+  8e:	88 b3       	in	r24, 0x18	; 24
+  90:	87 7f       	andi	r24, 0xF7	; 247
+  92:	88 bb       	out	0x18, r24	; 24
+
+	PORTB &= ~(1 << PIN_SCE);
+  94:	88 b3       	in	r24, 0x18	; 24
+  96:	8f 7e       	andi	r24, 0xEF	; 239
+  98:	88 bb       	out	0x18, r24	; 24
+
+	for (uint8_t i = 0; i < 8; i++) {
+  9a:	90 e0       	ldi	r25, 0x00	; 0
+  9c:	11 c0       	rjmp	.+34     	; 0xc0 <send+0x3e>
+		if (data & 0x80)
+  9e:	66 23       	and	r22, r22
+  a0:	24 f4       	brge	.+8      	; 0xaa <send+0x28>
+		PORTB |= (1 << PIN_SDIN);
+  a2:	88 b3       	in	r24, 0x18	; 24
+  a4:	80 62       	ori	r24, 0x20	; 32
+  a6:	88 bb       	out	0x18, r24	; 24
+  a8:	03 c0       	rjmp	.+6      	; 0xb0 <send+0x2e>
+		else
+		PORTB &= ~(1 << PIN_SDIN);
+  aa:	88 b3       	in	r24, 0x18	; 24
+  ac:	8f 7d       	andi	r24, 0xDF	; 223
+  ae:	88 bb       	out	0x18, r24	; 24
+
+		PORTB |= (1 << PIN_SCLK);
+  b0:	88 b3       	in	r24, 0x18	; 24
+  b2:	80 68       	ori	r24, 0x80	; 128
+  b4:	88 bb       	out	0x18, r24	; 24
+		data <<= 1;
+  b6:	66 0f       	add	r22, r22
+		PORTB &= ~(1 << PIN_SCLK);
+  b8:	88 b3       	in	r24, 0x18	; 24
+  ba:	8f 77       	andi	r24, 0x7F	; 127
+  bc:	88 bb       	out	0x18, r24	; 24
+	else
+	PORTB &= ~(1 << PIN_DC);
+
+	PORTB &= ~(1 << PIN_SCE);
+
+	for (uint8_t i = 0; i < 8; i++) {
+  be:	9f 5f       	subi	r25, 0xFF	; 255
+  c0:	98 30       	cpi	r25, 0x08	; 8
+  c2:	68 f3       	brcs	.-38     	; 0x9e <send+0x1c>
+		PORTB |= (1 << PIN_SCLK);
+		data <<= 1;
+		PORTB &= ~(1 << PIN_SCLK);
+	}
+
+	PORTB |= (1 << PIN_SCE);
+  c4:	88 b3       	in	r24, 0x18	; 24
+  c6:	80 61       	ori	r24, 0x10	; 16
+  c8:	88 bb       	out	0x18, r24	; 24
+  ca:	08 95       	ret
+
+000000cc <main>:
+}
+
+int main(void) {
+	// Настройка пинов
+	DDRB |= (1 << PIN_RESET) | (1 << PIN_DC) | (1 << PIN_SCE) | (1 << PIN_SDIN) | (1 << PIN_SCLK);
+  cc:	87 b3       	in	r24, 0x17	; 23
+  ce:	8c 6b       	ori	r24, 0xBC	; 188
+  d0:	87 bb       	out	0x17, r24	; 23
+
+	// Сброс дисплея
+	PORTB &= ~(1 << PIN_RESET);
+  d2:	88 b3       	in	r24, 0x18	; 24
+  d4:	8b 7f       	andi	r24, 0xFB	; 251
+  d6:	88 bb       	out	0x18, r24	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  d8:	83 ec       	ldi	r24, 0xC3	; 195
+  da:	99 e0       	ldi	r25, 0x09	; 9
+  dc:	01 97       	sbiw	r24, 0x01	; 1
+  de:	f1 f7       	brne	.-4      	; 0xdc <main+0x10>
+  e0:	00 c0       	rjmp	.+0      	; 0xe2 <main+0x16>
+  e2:	00 00       	nop
+	_delay_ms(10);
+	PORTB |= (1 << PIN_RESET);
+  e4:	88 b3       	in	r24, 0x18	; 24
+  e6:	84 60       	ori	r24, 0x04	; 4
+  e8:	88 bb       	out	0x18, r24	; 24
+
+	// Инициализация дисплея
+	send(LCD_C, 0x21); // Расширенный режим
+  ea:	61 e2       	ldi	r22, 0x21	; 33
+  ec:	80 e0       	ldi	r24, 0x00	; 0
+  ee:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	send(LCD_C, 0xB1); // Контраст
+  f2:	61 eb       	ldi	r22, 0xB1	; 177
+  f4:	80 e0       	ldi	r24, 0x00	; 0
+  f6:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	send(LCD_C, 0x04); // Температурный коэффициент
+  fa:	64 e0       	ldi	r22, 0x04	; 4
+  fc:	80 e0       	ldi	r24, 0x00	; 0
+  fe:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	send(LCD_C, 0x14); // Bias
+ 102:	64 e1       	ldi	r22, 0x14	; 20
+ 104:	80 e0       	ldi	r24, 0x00	; 0
+ 106:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	send(LCD_C, 0x20); // Базовый режим
+ 10a:	60 e2       	ldi	r22, 0x20	; 32
+ 10c:	80 e0       	ldi	r24, 0x00	; 0
+ 10e:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	send(LCD_C, 0x0C); // Нормальный режим
+ 112:	6c e0       	ldi	r22, 0x0C	; 12
+ 114:	80 e0       	ldi	r24, 0x00	; 0
+ 116:	0e 94 41 00 	call	0x82	; 0x82 <send>
+
+	// Очистка экрана
+	for (uint16_t i = 0; i < 504; i++) {
+ 11a:	c0 e0       	ldi	r28, 0x00	; 0
+ 11c:	d0 e0       	ldi	r29, 0x00	; 0
+ 11e:	05 c0       	rjmp	.+10     	; 0x12a <main+0x5e>
+		send(LCD_D, 0x00);
+ 120:	60 e0       	ldi	r22, 0x00	; 0
+ 122:	81 e0       	ldi	r24, 0x01	; 1
+ 124:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	send(LCD_C, 0x14); // Bias
+	send(LCD_C, 0x20); // Базовый режим
+	send(LCD_C, 0x0C); // Нормальный режим
+
+	// Очистка экрана
+	for (uint16_t i = 0; i < 504; i++) {
+ 128:	21 96       	adiw	r28, 0x01	; 1
+ 12a:	c8 3f       	cpi	r28, 0xF8	; 248
+ 12c:	91 e0       	ldi	r25, 0x01	; 1
+ 12e:	d9 07       	cpc	r29, r25
+ 130:	b8 f3       	brcs	.-18     	; 0x120 <main+0x54>
+ 132:	d0 e0       	ldi	r29, 0x00	; 0
+ 134:	1b c0       	rjmp	.+54     	; 0x16c <main+0xa0>
+	}
+
+	// Печать "Hello"
+	for (uint8_t i = 0; i < 5; i++) {
+		for (uint8_t j = 0; j < 5; j++) {
+			send(LCD_D, HELLO[i][j]);
+ 136:	8d 2f       	mov	r24, r29
+ 138:	90 e0       	ldi	r25, 0x00	; 0
+ 13a:	fc 01       	movw	r30, r24
+ 13c:	ee 0f       	add	r30, r30
+ 13e:	ff 1f       	adc	r31, r31
+ 140:	ee 0f       	add	r30, r30
+ 142:	ff 1f       	adc	r31, r31
+ 144:	e8 0f       	add	r30, r24
+ 146:	f9 1f       	adc	r31, r25
+ 148:	e0 5a       	subi	r30, 0xA0	; 160
+ 14a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 14c:	ec 0f       	add	r30, r28
+ 14e:	f1 1d       	adc	r31, r1
+ 150:	60 81       	ld	r22, Z
+ 152:	81 e0       	ldi	r24, 0x01	; 1
+ 154:	0e 94 41 00 	call	0x82	; 0x82 <send>
+		send(LCD_D, 0x00);
+	}
+
+	// Печать "Hello"
+	for (uint8_t i = 0; i < 5; i++) {
+		for (uint8_t j = 0; j < 5; j++) {
+ 158:	cf 5f       	subi	r28, 0xFF	; 255
+ 15a:	01 c0       	rjmp	.+2      	; 0x15e <main+0x92>
+ 15c:	c0 e0       	ldi	r28, 0x00	; 0
+ 15e:	c5 30       	cpi	r28, 0x05	; 5
+ 160:	50 f3       	brcs	.-44     	; 0x136 <main+0x6a>
+			send(LCD_D, HELLO[i][j]);
+		}
+		send(LCD_D, 0x00); // Пробел между буквами
+ 162:	60 e0       	ldi	r22, 0x00	; 0
+ 164:	81 e0       	ldi	r24, 0x01	; 1
+ 166:	0e 94 41 00 	call	0x82	; 0x82 <send>
+	for (uint16_t i = 0; i < 504; i++) {
+		send(LCD_D, 0x00);
+	}
+
+	// Печать "Hello"
+	for (uint8_t i = 0; i < 5; i++) {
+ 16a:	df 5f       	subi	r29, 0xFF	; 255
+ 16c:	d5 30       	cpi	r29, 0x05	; 5
+ 16e:	b0 f3       	brcs	.-20     	; 0x15c <main+0x90>
+ 170:	ff cf       	rjmp	.-2      	; 0x170 <main+0xa4>
+
+00000172 <_exit>:
+ 172:	f8 94       	cli
+
+00000174 <__stop_program>:
+ 174:	ff cf       	rjmp	.-2      	; 0x174 <__stop_program>
