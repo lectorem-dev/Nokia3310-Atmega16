@@ -22,13 +22,20 @@
   <FILE>hello-asm.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <main><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>47</LINE></main>
-  <send><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>20</LINE></send>
-  <send_loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>27</LINE></send_loop>
-  <delay><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>94</LINE></delay>
-  <hello><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>104</LINE></hello>
-  <print_loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>79</LINE></print_loop>
-  <loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>88</LINE></loop>
-  <delay_loop><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>96</LINE></delay_loop>
+  <main><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>88</LINE></main>
+  <STACK_INIT><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>13</LINE></STACK_INIT>
+  <DELAY_SHORT><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>21</LINE></DELAY_SHORT>
+  <DELAY_LOOP><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>24</LINE></DELAY_LOOP>
+  <SPI_INIT><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>32</LINE></SPI_INIT>
+  <SPI_TRANSMIT><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>43</LINE></SPI_TRANSMIT>
+  <LCD_WRITE_COMMAND><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>49</LINE></LCD_WRITE_COMMAND>
+  <LCD_WRITE_DATA><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>57</LINE></LCD_WRITE_DATA>
+  <LCD_INIT><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>65</LINE></LCD_INIT>
+  <PRINT_K><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>108</LINE></PRINT_K>
+  <PRINT_U><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>122</LINE></PRINT_U>
+  <PRINT_I><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>136</LINE></PRINT_I>
+  <PRINT_N><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>150</LINE></PRINT_N>
+  <while><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>98</LINE></while>
+  <PRINT_SPACE><FILE>C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm</FILE><LINE>103</LINE></PRINT_SPACE>
  </LABELS>
 </ASSEMBLER_INFO>

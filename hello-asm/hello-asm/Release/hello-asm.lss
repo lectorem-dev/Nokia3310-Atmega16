@@ -1,12 +1,10 @@
 
-AVRASM ver. 2.2.8  C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm Mon Apr 07 19:39:37 2025
+AVRASM ver. 2.2.8  C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm Tue Apr 08 02:37:30 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m16def.inc'
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m16def.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m16def.inc'
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m16def.inc'
                                  
-                                 .include "m16def.inc"
+                                 .device atmega16        ; Определяем целевое устройство
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega16.xml ************
                                  ;*************************************************************************
@@ -873,171 +871,165 @@ C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(1): In
                                  
                                  
                                  
-                                 ;***** Created: 2011-02-09 12:03 ******* Source: ATmega16.xml ************
-                                 ;*************************************************************************
-                                 ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
-                                 ;* 
-                                 ;* Number            : AVR000
-                                 ;* File Name         : "m16def.inc"
-                                 ;* Title             : Register/Bit Definitions for the ATmega16
-                                 ;* Date              : 2011-02-09
-                                 ;* Version           : 2.35
-                                 ;* Support E-mail    : avr@atmel.com
-                                 ;* Target MCU        : ATmega16
-                                 ;* 
-                                 ;* DESCRIPTION
-                                 ;* When including this file in the assembly program file, all I/O register 
-                                 ;* names and I/O register bit names appearing in the data book can be used.
-                                 ;* In addition, the six registers forming the three data pointers X, Y and 
-                                 ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
-                                 ;* SRAM is also defined 
-                                 ;* 
-                                 ;* The Register names are represented by their hexadecimal address.
-                                 ;* 
-                                 ;* The Register Bit names are represented by their bit number (0-7).
-                                 ;* 
-                                 ;* Please observe the difference in using the bit names with instructions
-                                 ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
-                                 ;* (skip if bit in register set/cleared). The following example illustrates
-                                 ;* this:
-                                 ;* 
-                                 ;* in    r16,PORTB             ;read PORTB latch
-                                 ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
-                                 ;* out   PORTB,r16             ;output to PORTB
-                                 ;* 
-                                 ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
-                                 ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
-                                 ;* rjmp  TOV0_is_set           ;jump if set
-                                 ;* ...                         ;otherwise do something else
-                                 ;*************************************************************************
+                                 ; ----	Регистры
+                                 .def R_TEMP = r16               ; Регистр для отправки данных по SPI
+                                 .def R_DELAY_SHORT_L  = r17		; Счётчик задержки (младший байт)
+                                 .def R_DELAY_SHORT_H  = r18     ; Счётчик задержки (старший байт)
                                  
-                                 #ifndef _M16DEF_INC_
-                                 
-                                 #endif  /* _M16DEF_INC_ */
-                                 
-                                 
-                                 .def temp = r16
-                                 .def data = r17
-                                 .def bitc = r18
-                                 
-                                 .equ PIN_RESET = 2
-                                 .equ PIN_DC    = 3
-                                 .equ PIN_SCE   = 4
-                                 .equ PIN_SDIN  = 5
-                                 .equ PIN_SCLK  = 7
-                                 
+                                 ; ---- Код
                                  .cseg
-                                 .org 0x00
-000000 c00f                      	rjmp main
+000000 940c 003c                 .org 0 JMP main		; Точка входа в программу
                                  
-                                 ; ========================
-                                 ; Отправка байта в дисплей
-                                 ; ========================
-                                 send:
-                                 	; DC бит
-000001 fd17                      	sbrc data, 7
-000002 9ac5                      	sbi PORTB, PIN_SDIN
-000003 ff17                      	sbrs data, 7
-000004 98c5                      	cbi PORTB, PIN_SDIN
-000005 e028                      	ldi bitc, 8
-                                 send_loop:
-                                 	; Выставить бит данных
-000006 fd17                      	sbrc data, 7
-000007 9ac5                      	sbi PORTB, PIN_SDIN
-000008 ff17                      	sbrs data, 7
-000009 98c5                      	cbi PORTB, PIN_SDIN
+                                 ; ---- Инициализация стека
+                                 STACK_INIT:
+000002 e004                          ldi R_TEMP, high(RAMEND)
+000003 bf0e                          out SPH, R_TEMP
+000004 e50f                          ldi R_TEMP, low(RAMEND)
+000005 bf0d                          out SPL, R_TEMP
+000006 9508                          ret
                                  
-                                 	; Пульс по SCLK
-00000a 9ac7                      	sbi PORTB, PIN_SCLK
-00000b 98c7                      	cbi PORTB, PIN_SCLK
+                                 ; ---- Функция задержки
+                                 DELAY_SHORT:
+000007 ef1f                          ldi R_DELAY_SHORT_L , 255	; Задаем значения для задержки
+000008 e129                          ldi R_DELAY_SHORT_H , 25
+                                 DELAY_LOOP:
+000009 951a                          dec R_DELAY_SHORT_L         ; Уменьшаем R_DELAY_SHORT_L 
+00000a f7f1                          brne DELAY_LOOP             ; Если R_DELAY_SHORT_L  не ноль, продолжаем цикл
+00000b 952a                          dec R_DELAY_SHORT_H         ; Уменьшаем R_DELAY_SHORT_H 
+00000c f7e1                          brne DELAY_LOOP             ; Если R_DELAY_SHORT_H  не ноль, продолжаем цикл
+00000d 9508                          ret
                                  
-                                 	; Сдвиг
-00000c 0f11                      	lsl data
-00000d 952a                      	dec bitc
-00000e f7b9                      	brne send_loop
-00000f 9508                      	ret
+                                 ; ---- Инициализация SPI
+                                 SPI_INIT:
+00000e eb00                          ldi R_TEMP, 0b10110000      ; SS, SCK, MOSI на выход
+00000f bb07                          out DDRB, R_TEMP            ; Отправляем в конфигуратор порта
+000010 9ac4                          sbi PORTB, 4                ; SS = 1
+000011 9ac6                          sbi PORTB, 6                ; MOSI = 1
+000012 ed01                          ldi R_TEMP, 0b11010001      ; SPI, SPIE и SPE = 1
+000013 b90d                          out SPCR, R_TEMP            ; MSTR = 1, SPR = 01, включаем SPI
+000014 9478                          sei                         ; Разрешаем прерывания    
+000015 9508                          ret
                                  
-                                 ; ========================
-                                 ; Главная программа
-                                 ; ========================
-                                 main:
-                                 	; Настройка портов
-000010 eb0c                      	ldi temp, (1<<PIN_RESET)|(1<<PIN_DC)|(1<<PIN_SCE)|(1<<PIN_SDIN)|(1<<PIN_SCLK)
-000011 bb07                      	out DDRB, temp
+                                 ; ---- Отправка данных через SPI
+                                 SPI_TRANSMIT:
+000016 b90f                          out SPDR, R_TEMP            ; Передаем данные в регистр SPDR
+000017 dfef                          rcall DELAY_SHORT           ; Вызов задержки
+000018 9508                          ret
                                  
-                                 	; Сброс дисплея
-000012 98c2                      	cbi PORTB, PIN_RESET
-000013 d01b                      	rcall delay
-000014 9ac2                      	sbi PORTB, PIN_RESET
+                                 ; ---- Запись команды на LCD
+                                 LCD_WRITE_COMMAND:
+000019 9897                          cbi PORTD, 7                ; D/C = 0 для отправки команды
+00001a 98c4                          cbi PORTB, 4                ; SS = 0
+00001b dffa                          rcall SPI_TRANSMIT          ; Отправка команды
+00001c 9ac4                          sbi PORTB, 4                ; SS = 1
+00001d 9508                          ret
                                  
-                                 	; Инициализация дисплея
-                                 	; (посылаем команды)
-000015 98c3                      	cbi PORTB, PIN_DC    ; командный режим
-000016 98c4                      	cbi PORTB, PIN_SCE
-000017 e211                      	ldi data, 0x21       ; расширенный режим
-000018 dfe8                      	rcall send
-000019 eb11                      	ldi data, 0xB1       ; контраст
-00001a dfe6                      	rcall send
-00001b e014                      	ldi data, 0x04       ; температурный коэффициент
-00001c dfe4                      	rcall send
-00001d e114                      	ldi data, 0x14       ; bias
-00001e dfe2                      	rcall send
-00001f e210                      	ldi data, 0x20       ; базовый режим
-000020 dfe0                      	rcall send
-000021 e01c                      	ldi data, 0x0C       ; нормальный режим
-000022 dfde                      	rcall send
-000023 9ac4                      	sbi PORTB, PIN_SCE
+                                 ; ---- Запись данных на LCD
+                                 LCD_WRITE_DATA:
+00001e 9a97                          sbi PORTD, 7                ; D/C = 1 для отправки данных
+00001f 98c4                          cbi PORTB, 4                ; SS = 0
+000020 dff5                          rcall SPI_TRANSMIT          ; Отправка данных
+000021 9ac4                          sbi PORTB, 4                ; SS = 1
+000022 9508                          ret
                                  
-000024 e0f0                      	ldi ZH, high(hello * 2)
-000025 e6e6                      	ldi ZL, low(hello * 2)
+                                 ; ---- Инициализация дисплея PCD8544
+                                 LCD_INIT:
+000023 b381                          in r24, 0x11	; Чтение состояния порта
+000024 6c80                          ori r24, 0xC0
+000025 bb81                          out 0x11, r24	; Инициализация дисплея
+000026 eb8f                          ldi r24, 0xBF
+000027 bb82                          out 0x12, r24
+000028 9a96                          sbi 0x12, 6		; Управление сбросом дисплея
                                  
-000026 e10e                      	ldi temp, 6 * 5      ; 6 буквы по 5 байт Hello_
-                                 print_loop:
-000027 9115                      	lpm data, Z+
-000028 9ac3                      	sbi PORTB, PIN_DC    ; данные
-000029 98c4                      	cbi PORTB, PIN_SCE
-00002a dfd6                      	rcall send
-00002b 9ac4                      	sbi PORTB, PIN_SCE
-00002c 950a                      	dec temp
-00002d f7c9                      	brne print_loop
+000029 e201                          ldi R_TEMP, 0x21
+00002a 940e 0019                     call LCD_WRITE_COMMAND
+00002c eb0a                          ldi R_TEMP, 0xBA
+00002d 940e 0019                     call LCD_WRITE_COMMAND
+00002f e004                          ldi R_TEMP, 0x04
+000030 940e 0019                     call LCD_WRITE_COMMAND
+000032 e104                          ldi R_TEMP, 0x14
+000033 940e 0019                     call LCD_WRITE_COMMAND
+000035 e200                          ldi R_TEMP, 0x20
+000036 940e 0019                     call LCD_WRITE_COMMAND
+000038 e00c                          ldi R_TEMP, 0x0C
+000039 940e 0019                     call LCD_WRITE_COMMAND
+00003b 9508                          ret
                                  
-                                 loop:
-00002e cfff                      	rjmp loop
+                                 ; ---- Основная программа
+                                 MAIN:
+00003c 940e 000e                     call SPI_INIT	; Инициализация SPI
+00003e 940e 0023                     call LCD_INIT	; Инициализация дисплея
                                  
-                                 ; ========================
-                                 ; Задержка (грубая)
-                                 ; ========================
-                                 delay:
-00002f e604                      	ldi temp, 100
-                                 delay_loop:
-000030 950a                      	dec temp
-000031 f7f1                      	brne delay_loop
-000032 9508                      	ret
+000040 940e 004e                     call PRINT_K
+000042 940e 005b                     call PRINT_U
+000044 940e 004e                     call PRINT_K
+000046 940e 0068                     call PRINT_I
+000048 940e 0075                     call PRINT_N
                                  
-                                 ; ========================
-                                 ; Таблица символов
-                                 ; ========================
-                                 hello:
-000033 087f
-000034 0808
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(105): warning: .cseg .db misalignment - padding zero byte
-000035 007f                      	.db 0x7F, 0x08, 0x08, 0x08, 0x7F ; H
-000036 5438
-000037 5454
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(106): warning: .cseg .db misalignment - padding zero byte
-000038 0018                      	.db 0x38, 0x54, 0x54, 0x54, 0x18 ; e
-000039 4100
-00003a 407f
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(107): warning: .cseg .db misalignment - padding zero byte
-00003b 0000                      	.db 0x00, 0x41, 0x7F, 0x40, 0x00 ; l
-00003c 4100
-00003d 407f
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(108): warning: .cseg .db misalignment - padding zero byte
-00003e 0000                      	.db 0x00, 0x41, 0x7F, 0x40, 0x00 ; l
-00003f 4438
-000040 4444
-C:\Users\Lectorem\Desktop\Nokia3310-Atmega16\hello-asm\hello-asm\main.asm(109): warning: .cseg .db misalignment - padding zero byte
-000041 0038                      	.db 0x38, 0x44, 0x44, 0x44, 0x38 ; o
+                                 while:
+00004a cfff                          RJMP while		; Бесконечный цикл
+                                 
+                                 
+                                 ; ---- Метки для печати символов
+                                 PRINT_SPACE: 
+00004b e000                          ldi R_TEMP, 0x00
+00004c dfd1                          rcall LCD_WRITE_DATA
+00004d 9508                          ret
+                                 
+                                 PRINT_K:
+00004e e70f                          ldi R_TEMP, 0x7f
+00004f dfce                          rcall LCD_WRITE_DATA
+000050 e008                          ldi R_TEMP, 0x08
+000051 dfcc                          rcall LCD_WRITE_DATA
+000052 e104                          ldi R_TEMP, 0x14
+000053 dfca                          rcall LCD_WRITE_DATA
+000054 e202                          ldi R_TEMP, 0x22
+000055 dfc8                          rcall LCD_WRITE_DATA
+000056 e401                          ldi R_TEMP, 0x41
+000057 dfc6                          rcall LCD_WRITE_DATA
+000058 940e 004b                     call PRINT_SPACE
+00005a 9508                          ret
+                                 
+                                 PRINT_U:
+00005b e30f                          ldi R_TEMP, 0x3f
+00005c dfc1                          rcall LCD_WRITE_DATA
+00005d e400                          ldi R_TEMP, 0x40
+00005e dfbf                          rcall LCD_WRITE_DATA
+00005f e400                          ldi R_TEMP, 0x40
+000060 dfbd                          rcall LCD_WRITE_DATA
+000061 e400                          ldi R_TEMP, 0x40
+000062 dfbb                          rcall LCD_WRITE_DATA
+000063 e30f                          ldi R_TEMP, 0x3f
+000064 dfb9                          rcall LCD_WRITE_DATA
+000065 940e 004b                     call PRINT_SPACE
+000067 9508                          ret
+                                 
+                                 PRINT_I:
+000068 e000                          ldi R_TEMP, 0x00
+000069 dfb4                          rcall LCD_WRITE_DATA
+00006a e401                          ldi R_TEMP, 0x41
+00006b dfb2                          rcall LCD_WRITE_DATA
+00006c e70f                          ldi R_TEMP, 0x7f
+00006d dfb0                          rcall LCD_WRITE_DATA
+00006e e401                          ldi R_TEMP, 0x41
+00006f dfae                          rcall LCD_WRITE_DATA
+000070 e000                          ldi R_TEMP, 0x00
+000071 dfac                          rcall LCD_WRITE_DATA
+000072 940e 004b                     call PRINT_SPACE
+000074 9508                          ret
+                                 
+                                 PRINT_N:
+000075 e70f                          ldi R_TEMP, 0x7f
+000076 dfa7                          rcall LCD_WRITE_DATA
+000077 e004                          ldi R_TEMP, 0x04
+000078 dfa5                          rcall LCD_WRITE_DATA
+000079 e008                          ldi R_TEMP, 0x08
+00007a dfa3                          rcall LCD_WRITE_DATA
+00007b e100                          ldi R_TEMP, 0x10
+00007c dfa1                          rcall LCD_WRITE_DATA
+00007d e70f                          ldi R_TEMP, 0x7f
+00007e df9f                          rcall LCD_WRITE_DATA
+00007f 940e 004b                     call PRINT_SPACE
 
 
 RESOURCE USE INFORMATION
@@ -1055,40 +1047,40 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega16" register use summary:
-x  :   0 y  :   0 z  :   1 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
+x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   6 r17:  12 r18:   2 r19:   0 r20:   0 
-r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
-r29:   0 r30:   1 r31:   1 
-Registers used: 6 out of 35 (17.1%)
+r13:   0 r14:   0 r15:   0 r16:  36 r17:   2 r18:   2 r19:   0 r20:   0 
+r21:   0 r22:   0 r23:   0 r24:   5 r25:   0 r26:   0 r27:   0 r28:   0 
+r29:   0 r30:   0 r31:   0 
+Registers used: 4 out of 35 (11.4%)
 
 "ATmega16" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   3 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   7 cbr   :   0 
+brne  :   2 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :  17 cbi   :   3 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  12 lds   :   0 lpm   :   1 lsl   :   1 
+cpi   :   0 cpse  :   0 dec   :   2 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   0 jmp   :   1 
+ld    :   0 ldd   :   0 ldi   :  34 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   1 pop   :   0 
-push  :   0 rcall :   8 ret   :   2 reti  :   0 rjmp  :   2 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   7 sbic  :   0 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   2 sbrs  :   2 sec   :   0 seh   :   0 
-sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   7 pop   :   0 
+push  :   0 rcall :  24 ret   :  12 reti  :   0 rjmp  :   1 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   6 sbic  :   0 sbis  :   0 
+sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
+sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 13 out of 113 (11.5%)
+Instructions used: 14 out of 113 (12.4%)
 
 "ATmega16" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000084    102     30    132   16384   0.8%
+[.cseg] 0x000000 0x000104    260      0    260   16384   1.6%
 [.dseg] 0x000060 0x000060      0      0      0    1024   0.0%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 
-Assembly complete, 0 errors, 5 warnings
+Assembly complete, 0 errors, 0 warnings

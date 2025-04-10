@@ -1,109 +1,162 @@
-.include "m16def.inc"
+.device atmega16        ; Определяем целевое устройство
 
-.def temp = r16
-.def data = r17
-.def bitc = r18
+; ----	Регистры
+.def R_TEMP = r16               ; Регистр для отправки данных по SPI
+.def R_DELAY_SHORT_L  = r17		; Счётчик задержки (младший байт)
+.def R_DELAY_SHORT_H  = r18     ; Счётчик задержки (старший байт)
 
-.equ PIN_RESET = 2
-.equ PIN_DC    = 3
-.equ PIN_SCE   = 4
-.equ PIN_SDIN  = 5
-.equ PIN_SCLK  = 7
-
+; ---- Код
 .cseg
-.org 0x00
-	rjmp main
+.org 0 JMP main		; Точка входа в программу
 
-; ========================
-; Отправка байта в дисплей
-; ========================
-send:
-	; DC бит
-	sbrc data, 7
-	sbi PORTB, PIN_SDIN
-	sbrs data, 7
-	cbi PORTB, PIN_SDIN
-	ldi bitc, 8
-send_loop:
-	; Выставить бит данных
-	sbrc data, 7
-	sbi PORTB, PIN_SDIN
-	sbrs data, 7
-	cbi PORTB, PIN_SDIN
+; ---- Инициализация стека
+STACK_INIT:
+    ldi R_TEMP, high(RAMEND)
+    out SPH, R_TEMP
+    ldi R_TEMP, low(RAMEND)
+    out SPL, R_TEMP
+    ret
 
-	; Пульс по SCLK
-	sbi PORTB, PIN_SCLK
-	cbi PORTB, PIN_SCLK
+; ---- Функция задержки
+DELAY_SHORT:
+    ldi R_DELAY_SHORT_L , 255	; Задаем значения для задержки
+    ldi R_DELAY_SHORT_H , 25
+DELAY_LOOP:
+    dec R_DELAY_SHORT_L         ; Уменьшаем R_DELAY_SHORT_L 
+    brne DELAY_LOOP             ; Если R_DELAY_SHORT_L  не ноль, продолжаем цикл
+    dec R_DELAY_SHORT_H         ; Уменьшаем R_DELAY_SHORT_H 
+    brne DELAY_LOOP             ; Если R_DELAY_SHORT_H  не ноль, продолжаем цикл
+    ret
 
-	; Сдвиг
-	lsl data
-	dec bitc
-	brne send_loop
-	ret
+; ---- Инициализация SPI
+SPI_INIT:
+    ldi R_TEMP, 0b10110000      ; SS, SCK, MOSI на выход
+    out DDRB, R_TEMP            ; Отправляем в конфигуратор порта
+    sbi PORTB, 4                ; SS = 1
+    sbi PORTB, 6                ; MOSI = 1
+    ldi R_TEMP, 0b11010001      ; SPI, SPIE и SPE = 1
+    out SPCR, R_TEMP            ; MSTR = 1, SPR = 01, включаем SPI
+    sei                         ; Разрешаем прерывания    
+    ret
 
-; ========================
-; Главная программа
-; ========================
-main:
-	; Настройка портов
-	ldi temp, (1<<PIN_RESET)|(1<<PIN_DC)|(1<<PIN_SCE)|(1<<PIN_SDIN)|(1<<PIN_SCLK)
-	out DDRB, temp
+; ---- Отправка данных через SPI
+SPI_TRANSMIT:
+    out SPDR, R_TEMP            ; Передаем данные в регистр SPDR
+    rcall DELAY_SHORT           ; Вызов задержки
+    ret
 
-	; Сброс дисплея
-	cbi PORTB, PIN_RESET
-	rcall delay
-	sbi PORTB, PIN_RESET
+; ---- Запись команды на LCD
+LCD_WRITE_COMMAND:
+    cbi PORTD, 7                ; D/C = 0 для отправки команды
+    cbi PORTB, 4                ; SS = 0
+    rcall SPI_TRANSMIT          ; Отправка команды
+    sbi PORTB, 4                ; SS = 1
+    ret
 
-	; Инициализация дисплея
-	; (посылаем команды)
-	cbi PORTB, PIN_DC    ; командный режим
-	cbi PORTB, PIN_SCE
-	ldi data, 0x21       ; расширенный режим
-	rcall send
-	ldi data, 0xB1       ; контраст
-	rcall send
-	ldi data, 0x04       ; температурный коэффициент
-	rcall send
-	ldi data, 0x14       ; bias
-	rcall send
-	ldi data, 0x20       ; базовый режим
-	rcall send
-	ldi data, 0x0C       ; нормальный режим
-	rcall send
-	sbi PORTB, PIN_SCE
+; ---- Запись данных на LCD
+LCD_WRITE_DATA:
+    sbi PORTD, 7                ; D/C = 1 для отправки данных
+    cbi PORTB, 4                ; SS = 0
+    rcall SPI_TRANSMIT          ; Отправка данных
+    sbi PORTB, 4                ; SS = 1
+    ret
 
-	ldi ZH, high(hello * 2)
-	ldi ZL, low(hello * 2)
+; ---- Инициализация дисплея PCD8544
+LCD_INIT:
+    in r24, 0x11	; Чтение состояния порта
+    ori r24, 0xC0
+    out 0x11, r24	; Инициализация дисплея
+    ldi r24, 0xBF
+    out 0x12, r24
+    sbi 0x12, 6		; Управление сбросом дисплея
 
-	ldi temp, 6 * 5      ; 6 буквы по 5 байт Hello_
-print_loop:
-	lpm data, Z+
-	sbi PORTB, PIN_DC    ; данные
-	cbi PORTB, PIN_SCE
-	rcall send
-	sbi PORTB, PIN_SCE
-	dec temp
-	brne print_loop
+    ldi R_TEMP, 0x21
+    call LCD_WRITE_COMMAND
+    ldi R_TEMP, 0xBA
+    call LCD_WRITE_COMMAND
+    ldi R_TEMP, 0x04
+    call LCD_WRITE_COMMAND
+    ldi R_TEMP, 0x14
+    call LCD_WRITE_COMMAND
+    ldi R_TEMP, 0x20
+    call LCD_WRITE_COMMAND
+    ldi R_TEMP, 0x0C
+    call LCD_WRITE_COMMAND
+    ret
 
-loop:
-	rjmp loop
+; ---- Основная программа
+MAIN:
+    call SPI_INIT	; Инициализация SPI
+    call LCD_INIT	; Инициализация дисплея
 
-; ========================
-; Задержка (грубая)
-; ========================
-delay:
-	ldi temp, 100
-delay_loop:
-	dec temp
-	brne delay_loop
-	ret
+    call PRINT_K
+    call PRINT_U
+    call PRINT_K
+    call PRINT_I
+    call PRINT_N
 
-; ========================
-; Таблица символов
-; ========================
-hello:
-	.db 0x7F, 0x08, 0x08, 0x08, 0x7F ; H
-	.db 0x38, 0x54, 0x54, 0x54, 0x18 ; e
-	.db 0x00, 0x41, 0x7F, 0x40, 0x00 ; l
-	.db 0x00, 0x41, 0x7F, 0x40, 0x00 ; l
-	.db 0x38, 0x44, 0x44, 0x44, 0x38 ; o
+while:
+    RJMP while		; Бесконечный цикл
+
+
+; ---- Метки для печати символов
+PRINT_SPACE: 
+    ldi R_TEMP, 0x00
+    rcall LCD_WRITE_DATA
+    ret
+
+PRINT_K:
+    ldi R_TEMP, 0x7f
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x08
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x14
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x22
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x41
+    rcall LCD_WRITE_DATA
+    call PRINT_SPACE
+    ret
+
+PRINT_U:
+    ldi R_TEMP, 0x3f
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x40
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x40
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x40
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x3f
+    rcall LCD_WRITE_DATA
+    call PRINT_SPACE
+    ret
+
+PRINT_I:
+    ldi R_TEMP, 0x00
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x41
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x7f
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x41
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x00
+    rcall LCD_WRITE_DATA
+    call PRINT_SPACE
+    ret
+
+PRINT_N:
+    ldi R_TEMP, 0x7f
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x04
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x08
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x10
+    rcall LCD_WRITE_DATA
+    ldi R_TEMP, 0x7f
+    rcall LCD_WRITE_DATA
+    call PRINT_SPACE
+    ret
